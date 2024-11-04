@@ -1,0 +1,8 @@
+{
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "prettier.requireConfig": false,
+  "notebook.defaultFormatter": "esbenp.prettier-vscode",
+  "files.autoSave": "afterDelay",
+  "prettier.configPath": "/Applications/XAMPP/xamppfiles/htdocs/couriers/.vscode/settings.json"
+}

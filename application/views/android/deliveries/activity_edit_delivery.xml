@@ -1,0 +1,288 @@
+
+<TextView
+android:id="@+id/title_deliveries"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:textAppearance="?android:attr/textAppearanceLarge"
+android:text="Edit"
+android:textStyle="normal|bold"
+android:textAlignment="center"
+android:textColor="@android:color/background_light"
+android:layout_centerHorizontal="true"
+android:textSize="40dp"
+android:paddingTop="60dp" />
+		
+						<EditText
+						android:id="@+id/tracking_number"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:hint="Tracking Number"
+						android:inputType="textText"
+						android:ems="10"
+						android:singleLine="true"
+						android:maxLength="30"
+						android:padding="12dp"
+						android:layout_below="@+id/deliveries"
+						android:layout_marginTop="42dp"/>
+						
+						
+						<EditText
+						android:id="@+id/sender_name"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:hint="Sender Name"
+						android:inputType="textText"
+						android:ems="10"
+						android:singleLine="true"
+						android:maxLength="30"
+						android:padding="12dp"
+						android:layout_below="@+id/tracking_number"
+						android:layout_marginTop="42dp"/>
+						
+						
+						<EditText
+						android:id="@+id/sender_address"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:hint="Sender Address"
+						android:inputType="textText"
+						android:ems="10"
+						android:singleLine="true"
+						android:maxLength="30"
+						android:padding="12dp"
+						android:layout_below="@+id/sender_name"
+						android:layout_marginTop="42dp"/>
+						
+						
+						<EditText
+						android:id="@+id/sender_contact"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:hint="Sender Contact"
+						android:inputType="textText"
+						android:ems="10"
+						android:singleLine="true"
+						android:maxLength="30"
+						android:padding="12dp"
+						android:layout_below="@+id/sender_address"
+						android:layout_marginTop="42dp"/>
+						
+						
+						<EditText
+						android:id="@+id/recipient_name"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:hint="Recipient Name"
+						android:inputType="textText"
+						android:ems="10"
+						android:singleLine="true"
+						android:maxLength="30"
+						android:padding="12dp"
+						android:layout_below="@+id/sender_contact"
+						android:layout_marginTop="42dp"/>
+						
+						
+						<EditText
+						android:id="@+id/recipient_address"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:hint="Recipient Address"
+						android:inputType="textText"
+						android:ems="10"
+						android:singleLine="true"
+						android:maxLength="30"
+						android:padding="12dp"
+						android:layout_below="@+id/recipient_name"
+						android:layout_marginTop="42dp"/>
+						
+						
+						<EditText
+						android:id="@+id/recipient_contact"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:hint="Recipient Contact"
+						android:inputType="textText"
+						android:ems="10"
+						android:singleLine="true"
+						android:maxLength="30"
+						android:padding="12dp"
+						android:layout_below="@+id/recipient_address"
+						android:layout_marginTop="42dp"/>
+						
+						
+						<EditText
+						android:id="@+id/courier_service_id"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:hint="Courier Service Id"
+						android:inputType="textEditText"
+						android:ems="10"
+						android:singleLine="true"
+						android:maxLength="30"
+						android:padding="12dp"
+						android:layout_below="@+id/recipient_contact"
+						android:layout_marginTop="42dp"/>
+						
+						
+						<EditText
+						android:id="@+id/shipment_date"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:hint="Shipment Date"
+						android:inputType="textEditText"
+						android:ems="10"
+						android:singleLine="true"
+						android:maxLength="30"
+						android:padding="12dp"
+						android:layout_below="@+id/courier_service_id"
+						android:layout_marginTop="42dp"/>
+						
+						
+						<EditText
+						android:id="@+id/expected_delivery_date"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:hint="Expected Delivery Date"
+						android:inputType="textEditText"
+						android:ems="10"
+						android:singleLine="true"
+						android:maxLength="30"
+						android:padding="12dp"
+						android:layout_below="@+id/shipment_date"
+						android:layout_marginTop="42dp"/>
+						
+						
+						<EditText
+						android:id="@+id/delivery_status"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:hint="Delivery Status"
+						android:inputType="textEditText"
+						android:ems="10"
+						android:singleLine="true"
+						android:maxLength="30"
+						android:padding="12dp"
+						android:layout_below="@+id/expected_delivery_date"
+						android:layout_marginTop="42dp"/>
+						
+						
+						<EditText
+						android:id="@+id/delivery_type"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:hint="Delivery Type"
+						android:inputType="textEditText"
+						android:ems="10"
+						android:singleLine="true"
+						android:maxLength="30"
+						android:padding="12dp"
+						android:layout_below="@+id/delivery_status"
+						android:layout_marginTop="42dp"/>
+						
+						
+						<EditText
+						android:id="@+id/package_weight"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:hint="Package Weight"
+						android:inputType="textText"
+						android:ems="10"
+						android:singleLine="true"
+						android:maxLength="30"
+						android:padding="12dp"
+						android:layout_below="@+id/delivery_type"
+						android:layout_marginTop="42dp"/>
+						
+						
+						<EditText
+						android:id="@+id/package_dimensions"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:hint="Package Dimensions"
+						android:inputType="textText"
+						android:ems="10"
+						android:singleLine="true"
+						android:maxLength="30"
+						android:padding="12dp"
+						android:layout_below="@+id/package_weight"
+						android:layout_marginTop="42dp"/>
+						
+						
+						<EditText
+						android:id="@+id/delivery_cost"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:hint="Delivery Cost"
+						android:inputType="textEditText"
+						android:ems="10"
+						android:singleLine="true"
+						android:maxLength="30"
+						android:padding="12dp"
+						android:layout_below="@+id/package_dimensions"
+						android:layout_marginTop="42dp"/>
+						
+						
+						<EditText
+						android:id="@+id/payment_status"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:hint="Payment Status"
+						android:inputType="textEditText"
+						android:ems="10"
+						android:singleLine="true"
+						android:maxLength="30"
+						android:padding="12dp"
+						android:layout_below="@+id/delivery_cost"
+						android:layout_marginTop="42dp"/>
+						
+						
+						<EditText
+						android:id="@+id/courier_notes"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:hint="Courier Notes"
+						android:inputType="textText"
+						android:ems="10"
+						android:singleLine="true"
+						android:maxLength="30"
+						android:padding="12dp"
+						android:layout_below="@+id/payment_status"
+						android:layout_marginTop="42dp"/>
+						
+						
+						<EditText
+						android:id="@+id/created_at"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:hint="Created At"
+						android:inputType="textText"
+						android:ems="10"
+						android:singleLine="true"
+						android:maxLength="30"
+						android:padding="12dp"
+						android:layout_below="@+id/courier_notes"
+						android:layout_marginTop="42dp"/>
+						
+						
+						<EditText
+						android:id="@+id/updated_at"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:hint="Updated At"
+						android:inputType="textText"
+						android:ems="10"
+						android:singleLine="true"
+						android:maxLength="30"
+						android:padding="12dp"
+						android:layout_below="@+id/created_at"
+						android:layout_marginTop="42dp"/>
+						
+						
+<Button
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:text="Update"
+android:id="@+id/btn_update_deliveries"
+android:background="@xml/btnselector"
+android:textColor="@android:color/background_light"
+/>
