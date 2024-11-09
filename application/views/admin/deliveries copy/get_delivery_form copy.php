@@ -1,7 +1,7 @@
 <form id="deliveries" class="form-horizontal" enctype="multipart/form-data" method="post">
     <input type="hidden" name="delivery_id" value="<?php echo $input->delivery_id; ?>" />
     <div class="form-group row">
-        <label for="tracking_number" class="col-sm-4 col-form-label">Tracking Number</label>
+        <label for="tracking_number" class="col-sm-4 col-form-label">Tracking No.</label>
         <div class="col-sm-8">
             <input type="text" required id="tracking_number" name="tracking_number"
                 value="<?php echo $input->tracking_number; ?>" class="form-control">
@@ -103,10 +103,10 @@
         </div>
     </div>
     <div class="form-group row">
-        <label for="delivery_cost" class="col-sm-4 col-form-label">Delivery Cost</label>
+        <label for="amount" class="col-sm-4 col-form-label">Amount</label>
         <div class="col-sm-8">
-            <input type="text" required id="delivery_cost" name="delivery_cost"
-                value="<?php echo $input->delivery_cost; ?>" class="form-control">
+            <input type="text" required id="amount" name="amount"
+                value="<?php echo $input->amount; ?>" class="form-control">
         </div>
     </div>
     

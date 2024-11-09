@@ -16,7 +16,7 @@ class Delivery_model extends MY_Model{
             
                         array(
                             "field"  =>  "tracking_number",
-                            "label"  =>  "Tracking Number",
+                            "label"  =>  "Tracking No.",
                             "rules"  =>  "required"
                         ),
                         
@@ -99,8 +99,8 @@ class Delivery_model extends MY_Model{
                         ),
                         
                         array(
-                            "field"  =>  "delivery_cost",
-                            "label"  =>  "Delivery Cost",
+                            "field"  =>  "amount",
+                            "label"  =>  "Amount",
                             "rules"  =>  "required"
                         ),
                         
@@ -166,7 +166,7 @@ public function save_data($image_field= NULL){
                     
                     $inputs["package_dimensions"]  =  $this->input->post("package_dimensions");
                     
-                    $inputs["delivery_cost"]  =  $this->input->post("delivery_cost");
+                    $inputs["amount"]  =  $this->input->post("amount");
                     
                     $inputs["payment_status"]  =  $this->input->post("payment_status");
                     
@@ -210,7 +210,7 @@ public function update_data($delivery_id, $image_field= NULL){
                     
                     $inputs["package_dimensions"]  =  $this->input->post("package_dimensions");
                     
-                    $inputs["delivery_cost"]  =  $this->input->post("delivery_cost");
+                    $inputs["amount"]  =  $this->input->post("amount");
                     
                     $inputs["payment_status"]  =  $this->input->post("payment_status");
                     

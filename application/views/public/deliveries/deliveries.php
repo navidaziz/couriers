@@ -83,7 +83,7 @@
 <th><?php echo $this->lang->line('delivery_type'); ?></th>
 <th><?php echo $this->lang->line('package_weight'); ?></th>
 <th><?php echo $this->lang->line('package_dimensions'); ?></th>
-<th><?php echo $this->lang->line('delivery_cost'); ?></th>
+<th><?php echo $this->lang->line('amount'); ?></th>
 <th><?php echo $this->lang->line('payment_status'); ?></th>
 <th><?php echo $this->lang->line('courier_notes'); ?></th>
 <th><?php echo $this->lang->line('created_at'); ?></th>
@@ -140,7 +140,7 @@
                 <?php echo $delivery->package_dimensions; ?>
             </td>
             <td>
-                <?php echo $delivery->delivery_cost; ?>
+                <?php echo $delivery->amount; ?>
             </td>
             <td>
                 <?php echo $delivery->payment_status; ?>

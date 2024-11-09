@@ -11,8 +11,8 @@ class Rider_app extends Admin_Controller
 
         parent::__construct();
         $this->load->model("admin/billing_month_model");
-       $this->lang->load("deliveries", 'english');
-		$this->lang->load("system", 'english');
+        $this->lang->load("deliveries", 'english');
+        $this->lang->load("system", 'english');
         //$this->output->enable_profiler(TRUE);
     }
     //---------------------------------------------------------------
@@ -24,7 +24,7 @@ class Rider_app extends Admin_Controller
     public function index()
     {
         $user_id = $this->session->userdata("userId");
-        $query="SELECT users.user_id, users.name, roles.role_title FROM users 
+        $query = "SELECT users.user_id, users.name, roles.role_title FROM users 
         INNER JOIN roles ON (roles.role_id = users.role_id)
         WHERE user_id = $user_id";
         $rider = $this->db->query($query)->row();
@@ -34,7 +34,8 @@ class Rider_app extends Admin_Controller
         $this->load->view(ADMIN_DIR . "layout", $this->data);
     }
 
-    public function get_delivery_detail(){
+    public function get_delivery_detail()
+    {
         $get_delivery_id = (int) $this->input->post('delivery_id');
         $user_id = $this->session->userdata("userId");
         $query = "SELECT deliveries.*, cs.courier_service_name, cs.logo FROM deliveries 
@@ -45,85 +46,122 @@ class Rider_app extends Admin_Controller
         $this->load->view(ADMIN_DIR . "rider_app/delivery_detail", $this->data);
     }
 
-    public function deliver(){
+    public function deliver()
+    {
         $rider_id = $this->session->userdata("userId");
         $delivery_id = (int) $this->input->post('delivery_id');
-        $query="SELECT COUNT(*) as total FROM deliveries WHERE delivery_id = ? and rider_id = ?";
-        $rider_delivery = $this->db->query($query, [$delivery_id,$rider_id])->row();
-        if($rider_delivery->total>0){
+        $query = "SELECT COUNT(*) as total FROM deliveries WHERE delivery_id = ? and rider_id = ?";
+        $rider_delivery = $this->db->query($query, [$delivery_id, $rider_id])->row();
+        if ($rider_delivery->total > 0) {
             $inputs['delivered_to'] = $delivered_to =  $this->input->post('delivered_to');
             $inputs['delivered_to_mobile_no'] = $delivered_to_mobile_no =  $this->input->post("delivered_to_mobile_no");
             $inputs['delivered_date'] =  date('Y-m-d H:i:s');
             $inputs['delivery_status'] = 'Delivered';
-            $this->db->where("delivery_id", $delivery_id); 
+            $this->db->where("delivery_id", $delivery_id);
             $inputs["last_updated"] = date('Y-m-d H:i:s');
-            if($this->db->update("deliveries", $inputs)){
+            if ($this->db->update("deliveries", $inputs)) {
                 //current user
                 $user_id = $this->session->userdata("userId");
-                $query="SELECT users.name, roles.role_title FROM users 
+                $query = "SELECT users.name, roles.role_title FROM users 
                 INNER JOIN roles ON (roles.role_id = users.role_id)
                 WHERE user_id = $user_id";
                 $creater = $this->db->query($query)->row();
                 //rider detail
-                $query="SELECT users.name, roles.role_title FROM users 
+                $query = "SELECT users.name, roles.role_title FROM users 
                 INNER JOIN roles ON (roles.role_id = users.role_id)
                 WHERE user_id = $rider_id";
                 $rider = $this->db->query($query)->row();
 
-                $log['created_by'] = $creater->name."(".$creater->role_title.")";
+                $log['created_by'] = $creater->name . "(" . $creater->role_title . ")";
                 $log['delivery_id'] = $delivery_id;
-                $log['detail'] = $creater->name."(".$creater->role_title.") Delivered package to ".$delivered_to."(".$delivered_to_mobile_no.") for shipment.";
+                $log['detail'] = $creater->name . "(" . $creater->role_title . ") Delivered package to " . $delivered_to . "(" . $delivered_to_mobile_no . ") for shipment.";
                 $this->db->insert("delivery_logs", $log);
                 echo "success";
-            }else{
+            } else {
                 echo "Error While updating record.";
             }
-        }else{
+        } else {
             echo "Package is not assign to you. contact to administration";
         }
-                
-            
     }
 
 
-public function cancel(){
+    public function cancel()
+    {
         $rider_id = $this->session->userdata("userId");
         $delivery_id = (int) $this->input->post('delivery_id');
-        $query="SELECT COUNT(*) as total FROM deliveries WHERE delivery_id = ? and rider_id = ?";
-        $rider_delivery = $this->db->query($query, [$delivery_id,$rider_id])->row();
-        if($rider_delivery->total>0){
+        $query = "SELECT COUNT(*) as total FROM deliveries WHERE delivery_id = ? and rider_id = ?";
+        $rider_delivery = $this->db->query($query, [$delivery_id, $rider_id])->row();
+        if ($rider_delivery->total > 0) {
             $inputs['cancelled_date'] =  date('Y-m-d H:i:s');
             $inputs['delivery_status'] = 'Cancelled';
-             $inputs['cancelled_reason'] = $cancelled_reason =  $this->input->post('cancelled_reason');
-            $this->db->where("delivery_id", $delivery_id); 
+            $inputs['cancelled_reason'] = $cancelled_reason =  $this->input->post('cancelled_reason');
+            $this->db->where("delivery_id", $delivery_id);
             $inputs["last_updated"] = date('Y-m-d H:i:s');
-            if($this->db->update("deliveries", $inputs)){
+            if ($this->db->update("deliveries", $inputs)) {
                 //current user
                 $user_id = $this->session->userdata("userId");
-                $query="SELECT users.name, roles.role_title FROM users 
+                $query = "SELECT users.name, roles.role_title FROM users 
                 INNER JOIN roles ON (roles.role_id = users.role_id)
                 WHERE user_id = $user_id";
                 $creater = $this->db->query($query)->row();
                 //rider detail
-                $query="SELECT users.name, roles.role_title FROM users 
+                $query = "SELECT users.name, roles.role_title FROM users 
                 INNER JOIN roles ON (roles.role_id = users.role_id)
                 WHERE user_id = $rider_id";
                 $rider = $this->db->query($query)->row();
 
-                $log['created_by'] = $creater->name."(".$creater->role_title.")";
+                $log['created_by'] = $creater->name . "(" . $creater->role_title . ")";
                 $log['delivery_id'] = $delivery_id;
-                $log['detail'] = $creater->name."(".$creater->role_title.") Cancelled delivery due to $cancelled_reason";
+                $log['detail'] = $creater->name . "(" . $creater->role_title . ") Cancelled delivery due to $cancelled_reason";
                 $this->db->insert("delivery_logs", $log);
                 echo "success";
-            }else{
+            } else {
                 echo "Error While updating record.";
             }
-        }else{
+        } else {
             echo "Package is not assign to you. contact to administration";
         }
-                
-            
     }
+
+    public function onhold()
+    {
+        $rider_id = $this->session->userdata("userId");
+        $delivery_id = (int) $this->input->post('delivery_id');
+        $query = "SELECT COUNT(*) as total FROM deliveries WHERE delivery_id = ? and rider_id = ?";
+        $rider_delivery = $this->db->query($query, [$delivery_id, $rider_id])->row();
+        if ($rider_delivery->total > 0) {
+            $inputs['onhold_date'] =  date('Y-m-d H:i:s');
+            $inputs['delivery_status'] = 'Onhold';
+            $inputs['onhold_reason'] = $onhold_reason =  $this->input->post('onhold_reason');
+            $this->db->where("delivery_id", $delivery_id);
+            $inputs["last_updated"] = date('Y-m-d H:i:s');
+            if ($this->db->update("deliveries", $inputs)) {
+                //current user
+                $user_id = $this->session->userdata("userId");
+                $query = "SELECT users.name, roles.role_title FROM users 
+                INNER JOIN roles ON (roles.role_id = users.role_id)
+                WHERE user_id = $user_id";
+                $creater = $this->db->query($query)->row();
+                //rider detail
+                $query = "SELECT users.name, roles.role_title FROM users 
+                INNER JOIN roles ON (roles.role_id = users.role_id)
+                WHERE user_id = $rider_id";
+                $rider = $this->db->query($query)->row();
+
+                $log['created_by'] = $creater->name . "(" . $creater->role_title . ")";
+                $log['delivery_id'] = $delivery_id;
+                $log['detail'] = $creater->name . "(" . $creater->role_title . ") Cancelled delivery due to $onhold_reason";
+                $this->db->insert("delivery_logs", $log);
+                echo "success";
+            } else {
+                echo "Error While updating record.";
+            }
+        } else {
+            echo "Package is not assign to you. contact to administration";
+        }
+    }
+
     public function view_consumers_list($billing_month_id)
     {
         $this->data['billing_month_id'] = $billing_month_id = (int) $billing_month_id;
@@ -132,7 +170,7 @@ public function cancel(){
         $this->data['billing_month'] = $billing_month = $this->db->query($query)->row();
 
         $this->data["description"] = 'Meter Reading for Month: ' . date("M, Y", strtotime($billing_month->billing_month));
-        $this->data["title"] ="Consumers List";
+        $this->data["title"] = "Consumers List";
         $this->data["view"] = ADMIN_DIR . "meter_reading_app/consumers_list";
         $this->load->view(ADMIN_DIR . "layout", $this->data);
     }

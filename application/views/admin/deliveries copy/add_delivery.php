@@ -4,10 +4,8 @@
 		<div class="page-header">
 			<!-- STYLER -->
 			
-			<!-- /STYLER -->
-			<!-- BREADCRUMBS -->
 			<ul class="breadcrumb">
-				<li>
+<li>
 					<i class="fa fa-home"></i>
 					<a href="<?php echo site_url(ADMIN_DIR.$this->session->userdata("role_homepage_uri")); ?>"><?php echo $this->lang->line('Home'); ?></a>
 				</li><li>
@@ -68,10 +66,9 @@
         <div class="box-body">
 
             <?php
-                $edit_form_attr = array("class" => "form-horizontal");
-                echo form_open_multipart(ADMIN_DIR."deliveries/update_data/$delivery->delivery_id", $edit_form_attr);
+                $add_form_attr = array("class" => "form-horizontal");
+                echo form_open_multipart(ADMIN_DIR."deliveries/save_data", $add_form_attr);
             ?>
-            <?php echo form_hidden("delivery_id", $delivery->delivery_id); ?>
             
             <div class="form-group">
             
@@ -90,7 +87,7 @@
                         "id"            =>  "tracking_number",
                         "class"         =>  "form-control",
                         "style"         =>  "","required"	  => "required","title"         =>  $this->lang->line('tracking_number'),
-                        "value"         =>  set_value("tracking_number", $delivery->tracking_number),
+                        "value"         =>  set_value("tracking_number"),
                         "placeholder"   =>  $this->lang->line('tracking_number')
                     );
                     echo  form_input($text);
@@ -119,7 +116,7 @@
                         "id"            =>  "sender_name",
                         "class"         =>  "form-control",
                         "style"         =>  "","required"	  => "required","title"         =>  $this->lang->line('sender_name'),
-                        "value"         =>  set_value("sender_name", $delivery->sender_name),
+                        "value"         =>  set_value("sender_name"),
                         "placeholder"   =>  $this->lang->line('sender_name')
                     );
                     echo  form_input($text);
@@ -148,7 +145,7 @@
                         "id"            =>  "sender_address",
                         "class"         =>  "form-control",
                         "style"         =>  "","required"	  => "required","title"         =>  $this->lang->line('sender_address'),
-                        "value"         =>  set_value("sender_address", $delivery->sender_address),
+                        "value"         =>  set_value("sender_address"),
                         "placeholder"   =>  $this->lang->line('sender_address')
                     );
                     echo  form_input($text);
@@ -177,7 +174,7 @@
                         "id"            =>  "sender_contact",
                         "class"         =>  "form-control",
                         "style"         =>  "","required"	  => "required","title"         =>  $this->lang->line('sender_contact'),
-                        "value"         =>  set_value("sender_contact", $delivery->sender_contact),
+                        "value"         =>  set_value("sender_contact"),
                         "placeholder"   =>  $this->lang->line('sender_contact')
                     );
                     echo  form_input($text);
@@ -206,7 +203,7 @@
                         "id"            =>  "recipient_name",
                         "class"         =>  "form-control",
                         "style"         =>  "","required"	  => "required","title"         =>  $this->lang->line('recipient_name'),
-                        "value"         =>  set_value("recipient_name", $delivery->recipient_name),
+                        "value"         =>  set_value("recipient_name"),
                         "placeholder"   =>  $this->lang->line('recipient_name')
                     );
                     echo  form_input($text);
@@ -235,7 +232,7 @@
                         "id"            =>  "recipient_address",
                         "class"         =>  "form-control",
                         "style"         =>  "","required"	  => "required","title"         =>  $this->lang->line('recipient_address'),
-                        "value"         =>  set_value("recipient_address", $delivery->recipient_address),
+                        "value"         =>  set_value("recipient_address"),
                         "placeholder"   =>  $this->lang->line('recipient_address')
                     );
                     echo  form_input($text);
@@ -264,7 +261,7 @@
                         "id"            =>  "recipient_contact",
                         "class"         =>  "form-control",
                         "style"         =>  "","required"	  => "required","title"         =>  $this->lang->line('recipient_contact'),
-                        "value"         =>  set_value("recipient_contact", $delivery->recipient_contact),
+                        "value"         =>  set_value("recipient_contact"),
                         "placeholder"   =>  $this->lang->line('recipient_contact')
                     );
                     echo  form_input($text);
@@ -287,7 +284,7 @@
 
                 <div class="col-md-8">
                     <?php
-                    echo form_dropdown("courier_service_id", $courier_services, $delivery->courier_service_id, "class=\"form-control\" required style=\"\"");
+                    echo form_dropdown("courier_service_id", $courier_services, "", "class=\"form-control\" required style=\"\"");
                     ?>
                 </div>
                 <?php echo form_error("courier_service_id", "<p class=\"text-danger\">", "</p>"); ?>
@@ -311,7 +308,7 @@
                         "id"            =>  "shipment_date",
                         "class"         =>  "form-control",
                         "style"         =>  "","required"	  => "required","title"         =>  $this->lang->line('shipment_date'),
-                        "value"         =>  set_value("shipment_date", $delivery->shipment_date),
+                        "value"         =>  set_value("shipment_date"),
                         "placeholder"   =>  $this->lang->line('shipment_date')
                     );
                     echo  form_input($date);
@@ -340,7 +337,7 @@
                         "id"            =>  "expected_delivery_date",
                         "class"         =>  "form-control",
                         "style"         =>  "","required"	  => "required","title"         =>  $this->lang->line('expected_delivery_date'),
-                        "value"         =>  set_value("expected_delivery_date", $delivery->expected_delivery_date),
+                        "value"         =>  set_value("expected_delivery_date"),
                         "placeholder"   =>  $this->lang->line('expected_delivery_date')
                     );
                     echo  form_input($date);
@@ -372,9 +369,7 @@
                                 "value"       => $option_value,
                                 "style"       => "","required"	  => "required",
                                 "class"       => "uniform"
-                                );if($option_value == $delivery->delivery_status){
-                                    $data["checked"] = TRUE;
-                                }
+                                );
                             echo form_radio($data)."<label for=\"delivery_status\" style=\"margin-left:10px;\">$options_name</label><br />";
                             
                         }
@@ -404,9 +399,7 @@
                                 "value"       => $option_value,
                                 "style"       => "","required"	  => "required",
                                 "class"       => "uniform"
-                                );if($option_value == $delivery->delivery_type){
-                                    $data["checked"] = TRUE;
-                                }
+                                );
                             echo form_radio($data)."<label for=\"delivery_type\" style=\"margin-left:10px;\">$options_name</label><br />";
                             
                         }
@@ -433,7 +426,7 @@
                         "id"            =>  "package_weight",
                         "class"         =>  "form-control",
                         "style"         =>  "","required"	  => "required","title"         =>  $this->lang->line('package_weight'),
-                        "value"         =>  set_value("package_weight", $delivery->package_weight),
+                        "value"         =>  set_value("package_weight"),
                         "placeholder"   =>  $this->lang->line('package_weight')
                     );
                     echo  form_input($text);
@@ -462,7 +455,7 @@
                         "id"            =>  "package_dimensions",
                         "class"         =>  "form-control",
                         "style"         =>  "","required"	  => "required","title"         =>  $this->lang->line('package_dimensions'),
-                        "value"         =>  set_value("package_dimensions", $delivery->package_dimensions),
+                        "value"         =>  set_value("package_dimensions"),
                         "placeholder"   =>  $this->lang->line('package_dimensions')
                     );
                     echo  form_input($text);
@@ -480,23 +473,23 @@
                     $label = array(
                         "class" => "col-md-2 control-label",
                         "style" => "",
-                    ); echo form_label($this->lang->line('delivery_cost'), "delivery_cost", $label);      ?>
+                    ); echo form_label($this->lang->line('amount'), "amount", $label);      ?>
 
                 <div class="col-md-8">
                 <?php
                     
                     $number = array(
                         "type"          =>  "number",
-                        "name"          =>  "delivery_cost",
-                        "id"            =>  "delivery_cost",
+                        "name"          =>  "amount",
+                        "id"            =>  "amount",
                         "class"         =>  "form-control",
-                        "style"         =>  "","required"	  => "required","title"         =>  $this->lang->line('delivery_cost'),
-                        "value"         =>  set_value("delivery_cost", $delivery->delivery_cost),
-                        "placeholder"   =>  $this->lang->line('delivery_cost')
+                        "style"         =>  "","required"	  => "required","title"         =>  $this->lang->line('amount'),
+                        "value"         =>  set_value("amount"),
+                        "placeholder"   =>  $this->lang->line('amount')
                     );
                     echo  form_input($number);
                 ?>
-                <?php echo form_error("delivery_cost", "<p class=\"text-danger\">", "</p>"); ?>
+                <?php echo form_error("amount", "<p class=\"text-danger\">", "</p>"); ?>
                 </div>
                 
                 
@@ -520,7 +513,7 @@
                         "id"            =>  "payment_status",
                         "class"         =>  "form-control",
                         "style"         =>  "","required"	  => "required","title"         =>  $this->lang->line('payment_status'),
-                        "value"         =>  set_value("payment_status", $delivery->payment_status),
+                        "value"         =>  set_value("payment_status"),
                         "placeholder"   =>  $this->lang->line('payment_status')
                     );
                     echo  form_input($number);
@@ -553,7 +546,7 @@
                         "title"         =>  $this->lang->line('courier_notes'),"required"	  => "required",
                         "rows"          =>  "",
                         "cols"          =>  "",
-                        "value"         => set_value("courier_notes", $delivery->courier_notes),
+                        "value"         => set_value("courier_notes"),
                         "placeholder"   =>  $this->lang->line('courier_notes')
                     );
                     echo form_textarea($textarea);
@@ -580,7 +573,7 @@
                         "id"            =>  "created_at",
                         "class"         =>  "form-control",
                         "style"         =>  "","required"	  => "required","title"         =>  $this->lang->line('created_at'),
-                        "value"         =>  set_value("created_at", $delivery->created_at),
+                        "value"         =>  set_value("created_at"),
                         "placeholder"   =>  $this->lang->line('created_at')
                     );
                     echo  form_input($text);
@@ -609,7 +602,7 @@
                         "id"            =>  "updated_at",
                         "class"         =>  "form-control",
                         "style"         =>  "","required"	  => "required","title"         =>  $this->lang->line('updated_at'),
-                        "value"         =>  set_value("updated_at", $delivery->updated_at),
+                        "value"         =>  set_value("updated_at"),
                         "placeholder"   =>  $this->lang->line('updated_at')
                     );
                     echo  form_input($text);
@@ -626,8 +619,8 @@
                 $submit = array(
                     "type"  =>  "submit",
                     "name"  =>  "submit",
-                    "value" =>  $this->lang->line('Update'),
-                    "class" =>  "btn btn-primary",
+                    "value" =>  $this->lang->line('Save'),
+					 "class" =>  "btn btn-primary",
                     "style" =>  ""
                 );
                 echo form_submit($submit); 

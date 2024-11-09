@@ -239,15 +239,22 @@ if (!function_exists('delivery_status')) {
 	function delivery_status($delivery_status)
 	{
 		if ($delivery_status == 'Shipped') {
-				return "<span class='label label-default'>$delivery_status</span>";
-			} 
+			return "<span class='label label-default'>$delivery_status</span>";
+		}
 		if ($delivery_status == 'Delivered') {
-				return "<span class='label label-success'>$delivery_status</span>";
-			} 	
+			return "<span class='label label-success'>$delivery_status</span>";
+		}
 		if ($delivery_status == 'Cancelled') {
-				return "<span class='label label-danger'>$delivery_status</span>";
-			}	
-		
+			return "<span class='label label-danger'>$delivery_status</span>";
+		}
+		if ($delivery_status == 'Onhold') {
+			return "<span class='label label-warning'>Onhold</span>";
+		}
+		if ($delivery_status == 'Completed') {
+			return "<span class='label label-success'>Completed</span>";
+		}
+
+		return "<span class='label label-danger'>Not Define</span>";
 	}
 }
 

@@ -119,9 +119,9 @@
                 </td>
             </tr>
             <tr>
-                <th><?php echo $this->lang->line('delivery_cost'); ?></th>
+                <th><?php echo $this->lang->line('amount'); ?></th>
                 <td>
-                    <?php echo $delivery->delivery_cost; ?>
+                    <?php echo $delivery->amount; ?>
                 </td>
             </tr>
             <tr>

@@ -15,7 +15,7 @@ public class DeliveryAddActivity extends AppCompatActivity {
 				private EditText delivery_type;
 				private text package_weight;
 				private text package_dimensions;
-				private EditText delivery_cost;
+				private EditText amount;
 				private EditText payment_status;
 				private text courier_notes;
 				private text created_at;
@@ -42,7 +42,7 @@ public class DeliveryAddActivity extends AppCompatActivity {
 				delivery_type = (EditText)findViewById(R.id.delivery_type);
 				package_weight = (text)findViewById(R.id.package_weight);
 				package_dimensions = (text)findViewById(R.id.package_dimensions);
-				delivery_cost = (EditText)findViewById(R.id.delivery_cost);
+				amount = (EditText)findViewById(R.id.amount);
 				payment_status = (EditText)findViewById(R.id.payment_status);
 				courier_notes = (text)findViewById(R.id.courier_notes);
 				created_at = (text)findViewById(R.id.created_at);
@@ -68,7 +68,7 @@ btn_add_deliveries.setOnClickListener(new View.OnClickListener() {
 				final String form_delivery_type = delivery_type.getText().toString();
 				final String form_package_weight = package_weight.getText().toString();
 				final String form_package_dimensions = package_dimensions.getText().toString();
-				final String form_delivery_cost = delivery_cost.getText().toString();
+				final String form_amount = amount.getText().toString();
 				final String form_payment_status = payment_status.getText().toString();
 				final String form_courier_notes = courier_notes.getText().toString();
 				final String form_created_at = created_at.getText().toString();
@@ -104,7 +104,7 @@ btn_add_deliveries.setOnClickListener(new View.OnClickListener() {
 				params.put("delivery_type", form_delivery_type);
 				params.put("package_weight", form_package_weight);
 				params.put("package_dimensions", form_package_dimensions);
-				params.put("delivery_cost", form_delivery_cost);
+				params.put("amount", form_amount);
 				params.put("payment_status", form_payment_status);
 				params.put("courier_notes", form_courier_notes);
 				params.put("created_at", form_created_at);

@@ -33,7 +33,7 @@ public class DeliveryListActivity extends AppCompatActivity {
 				Items[i][11] = json_object.getString("delivery_type");
 				Items[i][12] = json_object.getString("package_weight");
 				Items[i][13] = json_object.getString("package_dimensions");
-				Items[i][14] = json_object.getString("delivery_cost");
+				Items[i][14] = json_object.getString("amount");
 				Items[i][15] = json_object.getString("payment_status");
 				Items[i][16] = json_object.getString("courier_notes");
 				Items[i][17] = json_object.getString("created_at");

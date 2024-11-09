@@ -49,6 +49,21 @@
       color: black;
       margin: 0px !important;
     }
+
+    .table_medium>thead>tr>th,
+    .table_medium>tbody>tr>th,
+    .table_medium>tfoot>tr>th,
+    .table_medium>thead>tr>td,
+    .table_medium>tbody>tr>td,
+    .table_medium>tfoot>tr>td {
+      padding: 5px;
+      line-height: 1;
+      vertical-align: top;
+      border-top: 1px solid #ddd;
+      font-size: 12px !important;
+      color: black;
+      margin: 0px !important;
+    }
   </style>
 
 </head>

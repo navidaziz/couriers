@@ -1,5 +1,5 @@
 <?php 
-	$lang['tracking_number'] = 'Tracking Number';
+	$lang['tracking_number'] = 'Tracking No.';
 		$lang['sender_name'] = 'Sender Name';
 		$lang['sender_address'] = 'Sender Address';
 		$lang['sender_contact'] = 'Sender Contact';
@@ -13,13 +13,13 @@
 		$lang['delivery_type'] = 'Delivery Type';
 		$lang['package_weight'] = 'Package Weight';
 		$lang['package_dimensions'] = 'Package Dimensions';
-		$lang['delivery_cost'] = 'Delivery Cost';
+		$lang['amount'] = 'Amount';
 		$lang['payment_status'] = 'Payment Status';
 		$lang['courier_notes'] = 'Courier Notes';
 		$lang['created_at'] = 'Created At';
 		$lang['updated_at'] = 'Updated At';
 		$lang['courier_service_name'] = 'Courier Service Name';
-		$lang['tracking_number'] = 'Tracking Number';
+		$lang['tracking_number'] = 'Tracking No.';
 		$lang['sender_name'] = 'Sender Name';
 		$lang['sender_address'] = 'Sender Address';
 		$lang['sender_contact'] = 'Sender Contact';
@@ -33,7 +33,7 @@
 		$lang['delivery_type'] = 'Delivery Type';
 		$lang['package_weight'] = 'Package Weight';
 		$lang['package_dimensions'] = 'Package Dimensions';
-		$lang['delivery_cost'] = 'Delivery Cost';
+		$lang['amount'] = 'Amount';
 		$lang['payment_status'] = 'Payment Status';
 		$lang['courier_notes'] = 'Courier Notes';
 		$lang['created_at'] = 'Created At';

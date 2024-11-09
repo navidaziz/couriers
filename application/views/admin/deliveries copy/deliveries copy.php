@@ -10,10 +10,7 @@
 				<li>
 					<i class="fa fa-home"></i>
 					<a href="<?php echo site_url(ADMIN_DIR.$this->session->userdata("role_homepage_uri")); ?>"><?php echo $this->lang->line('Home'); ?></a>
-				</li><li>
-				<i class="fa fa-table"></i>
-				<a href="<?php echo site_url(ADMIN_DIR."deliveries/view/"); ?>"><?php echo $this->lang->line('Deliveries'); ?></a>
-			</li><li><?php echo $title; ?></li>
+				</li><li><?php echo $title; ?></li>
 			</ul>
 			<!-- /BREADCRUMBS -->
             <div class="row">
@@ -68,9 +65,10 @@
 			
             <div class="table-responsive">
                 
-                    <table class="table table-table-bordered">
+                    <table class="table table-bordered">
 						<thead>
 						  <tr>
+                          
 							<th><?php echo $this->lang->line('tracking_number'); ?></th>
 <th><?php echo $this->lang->line('sender_name'); ?></th>
 <th><?php echo $this->lang->line('sender_address'); ?></th>
@@ -85,20 +83,20 @@
 <th><?php echo $this->lang->line('delivery_type'); ?></th>
 <th><?php echo $this->lang->line('package_weight'); ?></th>
 <th><?php echo $this->lang->line('package_dimensions'); ?></th>
-<th><?php echo $this->lang->line('delivery_cost'); ?></th>
+<th><?php echo $this->lang->line('amount'); ?></th>
 <th><?php echo $this->lang->line('payment_status'); ?></th>
 <th><?php echo $this->lang->line('courier_notes'); ?></th>
 <th><?php echo $this->lang->line('created_at'); ?></th>
 <th><?php echo $this->lang->line('updated_at'); ?></th>
-<th><?php echo $this->lang->line('courier_service_name'); ?></th>
-                            <th><?php echo $this->lang->line('Action'); ?></th>
-						  </tr>
+<th><?php echo $this->lang->line('courier_service_name'); ?></th><th><?php echo $this->lang->line('Status'); ?></th><th><?php echo $this->lang->line('Action'); ?></th>
+                        </tr>
 						</thead>
 						<tbody>
 					  <?php foreach($deliveries as $delivery): ?>
+                         
                          <tr>
-                            
-                            
+                         
+                             
             <td>
                 <?php echo $delivery->tracking_number; ?>
             </td>
@@ -142,7 +140,7 @@
                 <?php echo $delivery->package_dimensions; ?>
             </td>
             <td>
-                <?php echo $delivery->delivery_cost; ?>
+                <?php echo $delivery->amount; ?>
             </td>
             <td>
                 <?php echo $delivery->payment_status; ?>
@@ -159,17 +157,36 @@
             <td>
                 <?php echo $delivery->courier_service_name; ?>
             </td>
-                            
-                            <td>
-                                <a class="llink llink-view" href="<?php echo site_url(ADMIN_DIR."deliveries/view_delivery/".$delivery->delivery_id."/".$this->uri->segment(3)); ?>"><i class="fa fa-eye"></i> </a>
-                                <a class="llink llink-restore" href="<?php echo site_url(ADMIN_DIR."deliveries/restore/".$delivery->delivery_id."/".$this->uri->segment(3)); ?>"><i class="fa fa-undo"></i></a>
-                                <a class="llink llink-delete" href="<?php echo site_url(ADMIN_DIR."deliveries/delete/".$delivery->delivery_id."/".$this->uri->segment(3)); ?>"><i class="fa fa-times"></i></a>
+                                <td>
+                                    <?php echo status($delivery->status,  $this->lang); ?>
+                                    <?php
+                                        
+                                        //set uri segment
+                                        if(!$this->uri->segment(4)){
+                                            $page = 0;
+                                        }else{
+                                            $page = $this->uri->segment(4);
+                                        }
+                                        
+                                        if($delivery->status == 0){
+                                            echo "<a href='".site_url(ADMIN_DIR."deliveries/publish/".$delivery->delivery_id."/".$page)."'> &nbsp;".$this->lang->line('Publish')."</a>";
+                                        }elseif($delivery->status == 1){
+                                            echo "<a href='".site_url(ADMIN_DIR."deliveries/draft/".$delivery->delivery_id."/".$page)."'> &nbsp;".$this->lang->line('Draft')."</a>";
+                                        }
+                                    ?>
+                                </td>
+                                <td>
+                                <a class="llink llink-view" href="<?php echo site_url(ADMIN_DIR."deliveries/view_delivery/".$delivery->delivery_id."/".$this->uri->segment(4)); ?>"><i class="fa fa-eye"></i> </a>
+                                <a class="llink llink-edit" href="<?php echo site_url(ADMIN_DIR."deliveries/edit/".$delivery->delivery_id."/".$this->uri->segment(4)); ?>"><i class="fa fa-pencil-square-o"></i></a>
+                                <a class="llink llink-trash" href="<?php echo site_url(ADMIN_DIR."deliveries/trash/".$delivery->delivery_id."/".$this->uri->segment(4)); ?>"><i class="fa fa-trash-o"></i></a>
                             </td>
                          </tr>
                       <?php endforeach; ?>
 						</tbody>
 					  </table>
+                      
                       <?php echo $pagination; ?>
+                      
 
             </div>
 			

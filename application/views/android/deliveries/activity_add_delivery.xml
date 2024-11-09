@@ -15,7 +15,7 @@ android:textSize="40dp" />
 						android:id="@+id/tracking_number"
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
-						android:hint="Tracking Number"
+						android:hint="Tracking No."
 						android:inputType="text"
 						android:ems="10"
 						android:singleLine="true"
@@ -236,10 +236,10 @@ android:textSize="40dp" />
 						
 						
 						<EditText
-						android:id="@+id/delivery_cost"
+						android:id="@+id/amount"
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
-						android:hint="Delivery Cost"
+						android:hint="Amount"
 						android:inputType="EditText"
 						android:ems="10"
 						android:singleLine="true"
@@ -261,7 +261,7 @@ android:textSize="40dp" />
 						android:singleLine="true"
 						android:maxLength="30"
 						android:layout_marginTop="10dp"
-						android:layout_below="@+id/delivery_cost"
+						android:layout_below="@+id/amount"
 						android:layout_alignParentLeft="true"
         				android:layout_alignParentStart="true" 
 						/>

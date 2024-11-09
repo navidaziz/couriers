@@ -53,12 +53,12 @@
                             <thead>
                                 <tr>
                                 <th>#</th>
-                                <th>Tracking Number</th>
+                                <th>Tracking No.</th>
                                     <th>Recipient Address</th>
                                     <th>Shipment Date</th>
                                     <th>Expected Delivery Date</th>
                                     <th>Delivery Type</th>
-                                    <th>Delivery Cost</th>
+                                    <th>Amount</th>
                                     <th>Courier Notes</th>
                                     <th>Action</th>
                             </tr>
@@ -76,7 +76,7 @@
                                         <td><?php echo $row->shipment_date; ?></td>
                                         <td><?php echo $row->expected_delivery_date; ?></td>
                                         <td><?php echo $row->delivery_type; ?></td>
-                                        <td><?php echo $row->delivery_cost; ?></td>
+                                        <td><?php echo $row->amount; ?></td>
                                         <td><?php echo $row->courier_notes; ?></td>
                                         <td>
                                         <form action="<?php echo site_url(ADMIN_DIR.'deliveries/assign_to_rider'); ?>" method="POST" >

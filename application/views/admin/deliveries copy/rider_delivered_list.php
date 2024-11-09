@@ -4,12 +4,12 @@
                             <thead>
                                 <th>#</th>
                                 <th>Batch No</th>
-                                <th>Tracking Number</th>
+                                <th>Tracking No.</th>
                                 <th>Recipient Name</th>
                                 <th>Recipient Address</th>
                                 <th>Recipient Contact</th>
                                 <th>Courier Service</th>
-                                <th>Delivery Cost</th>
+                                <th>Amount</th>
                                 <th>Payment Status</th>
                                 <th>Courier Notes</th>
                                 <th>Assigned Date</th>
@@ -23,7 +23,7 @@
                                 $count=1;
                                 $query = "SELECT d.*, cs.courier_service_name, cs.short_name   FROM deliveries as d 
                                 INNER JOIN courier_services as cs ON(cs.courier_service_id = d.courier_service_id)
-                                WHERE d.rider_id = ? and delivery_status = 'Cancelled'
+                                WHERE d.rider_id = ? and delivery_status = 'Delivered'
                                 ";
                                 $rows = $this->db->query($query, [$rider->user_id])->result();
                                 foreach ($rows as $row) { ?>
@@ -35,8 +35,8 @@
                                         <td><?php echo $row->recipient_address; ?></td>
                                         <td><?php echo $row->recipient_contact; ?></td>
                                         <td><?php echo $row->short_name; ?></td>
-                                        <td><?php echo $row->delivery_cost; 
-                                        $total_amount+=$row->delivery_cost;
+                                        <td><?php echo $row->amount; 
+                                        $total_amount+=$row->amount;
                                         ?></td>
                                         <td><?php echo $row->payment_status; ?></td>
                                         <td><?php echo $row->courier_notes; ?></td>
