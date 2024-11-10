@@ -325,6 +325,24 @@ class Courier_services extends Admin_Controller
         $this->load->view(ADMIN_DIR . "layout", $this->data);
     }
 
+    public function courier_service_batche_print($courier_service_id, $batch_id)
+    {
+
+        $courier_service_id = (int) $courier_service_id;
+        $batch_id = (int) $batch_id;
+
+        $this->data["courier_service"] = $this->courier_service_model->get_courier_service($courier_service_id)[0];
+        $query = "SELECT batches.*, cs.courier_service_name FROM batches 
+        INNER JOIN courier_services as cs ON(cs.courier_service_id = batches.courier_service_id)
+        WHERE batch_id = '" . $batch_id . "'";
+        $this->data['batch'] = $batch = $this->db->query($query)->row();
+
+        $this->data["title"] = "Batch No: " . $batch->batch_no;
+        $this->data["description"] = $this->lang->line('Courier Service Details');
+        //$this->data["view"] = ADMIN_DIR . "courier_services/courier_service_batche";
+        $this->load->view(ADMIN_DIR . "courier_services/courier_service_batche_print", $this->data);
+    }
+
     private function get_inputs()
     {
         $input["batch_id"] = $this->input->post("batch_id");

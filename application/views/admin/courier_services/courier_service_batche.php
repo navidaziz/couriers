@@ -125,7 +125,7 @@
         <div class="box border blue" id="messenger">
             <div class="box-body">
 
-                <div class="table-responsive">
+                <div class="table-responsive" id="printableDiv">
                     <table class="table table-bordered table_" id="batches">
                         <thead>
                             <tr>
@@ -441,6 +441,7 @@
 
                     if (($batch_status->total_packages == ($batch_status->total_cancelled + $batch_status->total_delivered)) and
                         $batch_status->paid_amount == $batch_status->total_delivered_amount
+                        and $batch_status->total_packages > 0
                     ) { ?>
                         <?php if ($batch->payment_status == 'Unpaid') { ?>
                             Do you want to mark this batch as Paid and Completed?
@@ -450,9 +451,8 @@
                             <div id="paid_and_complete" style="border:1px solid gray; border-radius:5px; margin:5px; padding:5px; display:none; ">
                                 <form method="post" action="<?php echo site_url(ADMIN_DIR . "courier_services/complete_batch"); ?>"
                                     onsubmit="return confirm('Are you sure you want to complete this batch?');">
-                                    <input type="hidden" value="<?php echo $row->delivery_id; ?>" name="delivery_id" />
-                                    <input type="hidden" value="<?php echo $row->batch_id; ?>" name="batch_id" />
-                                    <input type="hidden" value="<?php echo $row->courier_service_id; ?>" name="courier_service_id" />
+                                    <input type="hidden" value="<?php echo $batch->batch_id; ?>" name="batch_id" />
+                                    <input type="hidden" value="<?php echo $courier_service->courier_service_id; ?>" name="courier_service_id" />
                                     <input type="hidden" name="total_packages_received" value="<?php echo $batch_status->total_packages; ?>" />
                                     <input type="hidden" name="total_amount" value="<?php echo $batch_status->total_amount; ?>" />
                                     <input type="hidden" name="total_delivered" value="<?php echo $batch_status->total_delivered; ?>" />
@@ -502,9 +502,14 @@
                         <?php } ?>
                     <?php } ?>
 
+
+                </div>
+                <div style="text-align: center;">
+                    <a target="_blank" class="btn btn-warning btn-sm" href="<?php echo site_url(ADMIN_DIR . 'courier_services/courier_service_batche_print/' . $courier_service->courier_service_id . '/' . $batch->batch_id . '/'); ?>"><i class="fa fa-print" aria-hidden="true"></i> Print</a>
                 </div>
 
             </div>
+
         </div>
         <!-- /MESSENGER -->
     </div>
