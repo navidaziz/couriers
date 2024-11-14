@@ -119,6 +119,52 @@
             </div>
 
         </div>
+        <div class="box border blue" id="messenger">
+            <div class="box-body">
+                <div style="text-align: center;">
+                    <strong>Verify Batch Packages</strong>
+                    <table class="table">
+                        <tr>
+                            <td>Search by Tracking No: <br />
+                                <input class="form-control" type="text" id="tracking_no" placeholder="Scan barcode here" autofocus>
+                                <div style="margin-top: 5px;" id="tracking_no_response"></div>
+                            </td>
+                        </tr>
+                    </table>
+                    <script>
+                        // Function to handle the barcode data
+                        function handleBarcode(barcode) {
+                            alert("Barcode Scanned: " + barcode);
+                            // Additional processing can be added here
+                        }
+
+                        // Add event listener for the input field
+                        const barcodeInput = document.getElementById('tracking_no');
+                        barcodeInput.addEventListener('keyup', function(event) {
+
+                            $('#tracking_no_response').html('');
+                            if (event.key === 'Enter') {
+                                var tracking_no = $('#tracking_no').val();
+                                $.ajax({
+                                    type: 'POST',
+                                    url: '<?php echo site_url(ADMIN_DIR . "courier_services/seacrch_by_tracking_no"); ?>', // URL to submit form data
+                                    data: {
+                                        tracking_no: tracking_no,
+                                        batch_id: <?php echo $batch->batch_id ?>,
+                                        courier_service_id: <?php echo $courier_service->courier_service_id; ?>
+                                    },
+                                    success: function(response) {
+                                        $('#tracking_no_response').html(response).fadeIn(200);
+                                        var tracking_no = $('#tracking_no').val("");
+                                    }
+                                });
+                            }
+                        });
+                    </script>
+                </div>
+            </div>
+
+        </div>
     </div>
 
     <div class="col-md-9">
@@ -142,6 +188,7 @@
                                 <td><?php echo $batch->batch_no; ?></td>
                                 <td><?php echo $batch->batch_date; ?></td>
                                 <td><?php echo $batch->batch_detail; ?></td>
+
                                 <td><?php echo $batch->payment_status; ?></td>
                             </tr>
 
@@ -166,6 +213,8 @@
                                     <th>Recipient Name</th>
                                     <th>Recipient Address</th>
                                     <th>Recipient Contact</th>
+                                    <th>Verified</th>
+
                                     <th>Delivery Status</th>
                                     <th>Amount</th>
                                     <?php if ($status->delivery_status == 'Pending' or $status->delivery_status == 'Cancelled') { ?>
@@ -189,6 +238,7 @@
                                             <td><?php echo $row->recipient_name; ?></td>
                                             <td><?php echo $row->recipient_address; ?></td>
                                             <td><?php echo $row->recipient_contact; ?></td>
+                                            <td><?php echo $row->verified; ?></td>
                                             <td><?php echo $row->delivery_status; ?></td>
                                             <td><?php echo $row->amount;
                                                 $total_amount += $row->amount;
@@ -217,7 +267,8 @@
                                         <th></th>
                                         <th></th>
                                         <th></th>
-                                        <th>Total Packages: <?php echo ($count - 1); ?></th>
+                                        <th>Total Packages: </th>
+                                        <th><?php echo ($count - 1); ?></th>
                                         <th style="text-align: right;">Total: </th>
                                         <th><?php echo $total_amount; ?></th>
                                     </tr>
@@ -229,6 +280,7 @@
                                         $paid = $this->db->query($query)->row();
                                     ?>
                                         <tr>
+                                            <th></th>
                                             <th></th>
                                             <th></th>
                                             <th></th>

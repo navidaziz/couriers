@@ -131,7 +131,7 @@
 
                     <script type="text/javascript">
                         $(document).ready(function() {
-                            document.title = "batches (Date:<?php echo date('d-m-Y h:m:s') ?>)";
+                            document.title = "Batches (Date:<?php echo date('d-m-Y h:m:s') ?>)";
                             $("#datatable").DataTable({
                                 "processing": true,
                                 "serverSide": true,
@@ -139,7 +139,9 @@
                                     "url": "<?php echo base_url(ADMIN_DIR . "courier_services/batches"); ?>",
                                     "type": "POST",
                                     "data": {
-                                        courier_service_id: '<?php echo $courier_service->courier_service_id; ?>'
+                                        courier_service_id: '<?php echo $courier_service->courier_service_id; ?>',
+
+
                                     }
                                 },
                                 "columns": [{
@@ -171,8 +173,8 @@
                                         "data": null,
                                         "render": function(data, type, row) {
                                             // '<a class="llink llink-view" href="<?php echo site_url(ADMIN_DIR . "batches/trash/"); ?>' + row.batch_id + '/' + '" onclick="return confirm(\'Are you sure? you want to delete the record.\')"><i class="fa fa-trash-o"></i></a><span style="margin-left: 20px;"></span>' +
-                                            return '<a class="llink llink-view" href="<?php echo site_url(ADMIN_DIR . "courier_services/courier_service_batche/"); ?>' + row.courier_service_id + '/' + row.batch_id + '/' + '"><i class="fa fa-eye"></i></a><span style="margin-left: 20px;"></span>' +
-                                                '<a class="llink llink-edit" href="<?php echo site_url(ADMIN_DIR . "batches/edit/"); ?>' + row.batch_id + '/' + '"><i class="fa fa-pencil-square-o"></i></a>';
+                                            return '<a class="btn btn-success btn-sm" href="<?php echo site_url(ADMIN_DIR . "courier_services/courier_service_batche/"); ?>' + row.courier_service_id + '/' + row.batch_id + '/' + '">View</a><span style="margin-left: 20px;"></span>' +
+                                                '<button onclick="get_batch_form(\'' + row.batch_id + '\')" class="btn btn-primary btn-sm">Edit</button>';
                                         }
                                     }
 

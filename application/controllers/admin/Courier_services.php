@@ -350,6 +350,7 @@ class Courier_services extends Admin_Controller
         $input["batch_no"] = $this->input->post("batch_no");
         $input["batch_date"] = $this->input->post("batch_date");
         $input["batch_detail"] = $this->input->post("batch_detail");
+        $input["csv_file"] = $this->input->post("csv_file");
         $inputs =  (object) $input;
         return $inputs;
     }
@@ -366,6 +367,7 @@ class Courier_services extends Admin_Controller
             batches 
             WHERE batch_id = $batch_id";
             $input = $this->db->query($query)->row();
+            //var_dump($input);
         }
         $this->data["input"] = $input;
         $this->load->view(ADMIN_DIR . "courier_services/get_batch_form", $this->data);
@@ -373,6 +375,7 @@ class Courier_services extends Admin_Controller
 
     public function add_batch()
     {
+        // Set form validation rules
         $this->form_validation->set_rules("courier_service_id", "Courier Service Id", "required");
         $this->form_validation->set_rules("batch_no", "Batch No", "required");
         $this->form_validation->set_rules("batch_detail", "Batch Detail", "required");
@@ -381,19 +384,108 @@ class Courier_services extends Admin_Controller
             echo '<div class="alert alert-danger">' . validation_errors() . "</div>";
             exit();
         } else {
-            $inputs = $this->get_inputs();
+            // Set file upload configuration
+            $config = array(
+                "upload_path" => "./assets/uploads/" . $this->router->fetch_class() . "/",
+                "allowed_types" => "csv",
+                "max_size" => 10000,
+                "remove_spaces" => true,
+                "encrypt_name" => true
+            );
+
+            // Create directory if it doesn't exist
+            $dir = $config["upload_path"];
+            if (!is_dir($dir)) {
+                mkdir($dir, 0777, true);
+            }
+
+            $this->load->library("upload", $config);
+
+            // Upload file and handle errors
+            if (!$this->upload->do_upload('csv_file')) {
+                echo '<div class="alert alert-danger">' . $this->upload->display_errors() . "</div>";
+                return false;
+            } else {
+                // Get the uploaded file name and path
+                $fileData = $this->upload->data();
+                $inputs = $this->get_inputs();
+                $inputs->csv_file = $this->router->fetch_class() . "/" . $fileData['file_name'];
+            }
+
+            // Additional data setup
             $inputs->created_by = $this->session->userdata("userId");
             $batch_id = (int) $this->input->post("batch_id");
+
+            // Insert or update batch in the database
             if ($batch_id == 0) {
                 $this->db->insert("batches", $inputs);
+                $batch_id = $this->db->insert_id();
             } else {
                 $this->db->where("batch_id", $batch_id);
                 $inputs->last_updated = date('Y-m-d H:i:s');
                 $this->db->update("batches", $inputs);
             }
+
+
+
+            $query = "SELECT * FROM batches WHERE batch_id = ?";
+            $batch = $this->db->query($query, $batch_id)->row();
+
+            // Read the uploaded CSV file
+            $file_path = './assets/uploads/' . $batch->csv_file;
+            if (($handle = fopen($file_path, 'r')) !== FALSE) {
+                // Skip header row if necessary
+                fgetcsv($handle);
+                $courier_service_id = (int) $this->input->post('courier_service_id');
+                $query = "SELECT * FROM courier_services WHERE courier_service_id = ?";
+                $courier_services = $this->db->query($query, [$courier_service_id])->row();
+                // Loop through the rows in the CSV
+                while (($row = fgetcsv($handle)) !== FALSE) {
+                    //check either data in database or not;
+                    $query = "SELECT count(*) as total FROM deliveries 
+            WHERE batch_id = ? 
+            AND tracking_number = ?";
+                    $traking_id_count = $this->db->query($query, [$batch_id, $row[1]])->row();
+
+                    $csv_input = array(
+                        'courier_service_id' => $courier_service_id,
+                        'batch_id' => $batch_id,
+                        'delivery_type' => 'standard',
+                        'sender_name' => $courier_services->courier_service_name,
+                        'sender_contact' => '',
+                        'sender_address' => '',
+                        'batch_id' => $batch->batch_id,
+                        'verified' => 'No',
+                        'payment_status' => 'No',
+                        'delivery_status' => 'Pending',
+                        'expected_delivery_date' => date('Y-m-d', strtotime('+1 day')),
+                        'tracking_number' => $row[0],
+                        'amount' => $row[1],
+                        'recipient_name' => $row[2],
+                        'recipient_contact' => $row[3],
+                        'recipient_address' => $row[4]
+                    );
+
+                    if ($traking_id_count->total == 0) {
+                        // Insert new record if tracking number does not exist
+                        $this->db->insert('deliveries', $csv_input);
+                    } else {
+                        // Update existing record if tracking number already exists
+                        $this->db->where('batch_id', $batch_id);
+                        $this->db->where('tracking_number', $row[1]);
+                        $this->db->update('deliveries', $csv_input);
+                    }
+                }
+
+                fclose($handle);
+            } else {
+                echo 'Error opening the CSV file.';
+            }
+
             echo "success";
         }
     }
+
     public function delete_batch($batch_id)
     {
         $batch_id = (int) $batch_id;
@@ -613,5 +705,38 @@ class Courier_services extends Admin_Controller
         $inputs['updated_by'] = $this->session->userdata("userId");
         $this->db->update("batches", $inputs);
         redirect(ADMIN_DIR . "courier_services/courier_service_batche/" . $courier_service_id . "/" . $batch_id);
+    }
+    public function seacrch_by_tracking_no()
+    {
+        $batch_id = (int) $this->input->post('batch_id');
+        $courier_service_id = (int) $this->input->post('courier_service_id');
+        $tracking_no = $this->input->post('tracking_no');
+        $query = "SELECT COUNT(*) as total FROM deliveries 
+        WHERE batch_id = ?
+        AND courier_service_id = ?
+        AND tracking_number = ?";
+        $package = $this->db->query($query, [$batch_id, $courier_service_id, $tracking_no])->row();
+        if ($package->total > 0) {
+            $query = "SELECT tracking_number, amount, verified, recipient_name, COUNT(*) as total FROM deliveries 
+                WHERE batch_id = ?
+                AND courier_service_id = ?
+                AND tracking_number = ?";
+            $package = $this->db->query($query, [$batch_id, $courier_service_id, $tracking_no])->row();
+            if ($package->verified == 'No') {
+                $inputs['verified'] =  'Yes';
+                $this->db->where("tracking_number", $tracking_no);
+                $this->db->update("deliveries", $inputs);
+                echo '
+                <div>Tracking Id: ' . $package->tracking_number . '<br />
+                Amount: ' . $package->amount . '<br />
+                Recipient Name: ' . $package->recipient_name . '<br />
+                </div>
+                <div class="alert alert-warning">Package Marked as Verified</div>';
+            } else {
+                echo '<div class="alert alert-success">Package Already Verified</div>';
+            }
+        } else {
+            echo '<div class="alert alert-danger">Package Not Found In This Batch.</div>';
+        }
     }
 }
