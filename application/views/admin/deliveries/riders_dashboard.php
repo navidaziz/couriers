@@ -1,3 +1,4 @@
+ <h4>Rider Delivery Tracking Dashboard</h4>
  <table id="datatable" class="table  table-bordered">
      <thead>
          <tr>
@@ -51,3 +52,34 @@
          <?php } ?>
      </tbody>
  </table>
+
+ <script>
+     title = 'Rider Delivery Tracking <?php echo date('Y-m-d h:m:s') ?>';
+     $(document).ready(function() {
+         $('#datatable').DataTable({
+             dom: 'Bfrtip', // Add 'f' for the search filter.
+             buttons: [{
+                     extend: 'copy',
+                     title: title
+                 },
+                 {
+                     extend: 'csv',
+                     title: title
+                 },
+                 {
+                     extend: 'excel',
+                     title: title
+                 },
+                 {
+                     extend: 'pdf',
+                     title: title
+                 },
+                 {
+                     extend: 'print',
+                     title: title
+                 }
+             ],
+             searching: true // Optional, enabled by default.
+         });
+     });
+ </script>
