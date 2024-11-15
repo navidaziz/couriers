@@ -9,7 +9,7 @@
             <ul class="breadcrumb">
                 <li>
                     <i class="fa fa-home"></i>
-                    <a href="<?php echo site_url(ADMIN_DIR . $this->session->userdata("role_homepage_uri")); ?>"><?php echo $this->lang->line('Home'); ?></a>
+                    <a href="<?php echo site_url($this->session->userdata("role_homepage_uri")); ?>"><?php echo $this->lang->line('Home'); ?></a>
                 </li>
                 <li>
                     <i class="fa fa-table"></i>
@@ -92,7 +92,9 @@
                             "name"          =>  "tariff_type",
                             "id"            =>  "tariff_type",
                             "class"         =>  "form-control",
-                            "style"         =>  "", "required"      => "required", "title"         =>  $this->lang->line('tariff_type'),
+                            "style"         =>  "",
+                            "required"      => "required",
+                            "title"         =>  $this->lang->line('tariff_type'),
                             "value"         =>  set_value("tariff_type", $tariff->tariff_type),
                             "placeholder"   =>  $this->lang->line('tariff_type')
                         );
@@ -155,7 +157,9 @@
                             "name"          =>  "monthly_service_charges",
                             "id"            =>  "monthly_service_charges",
                             "class"         =>  "form-control",
-                            "style"         =>  "", "required"      => "required", "title"         =>  $this->lang->line('monthly_service_charges'),
+                            "style"         =>  "",
+                            "required"      => "required",
+                            "title"         =>  $this->lang->line('monthly_service_charges'),
                             "value"         =>  set_value("monthly_service_charges", $tariff->monthly_service_charges),
                             "placeholder"   =>  $this->lang->line('monthly_service_charges')
                         );
@@ -185,7 +189,9 @@
                             "name"          =>  "tax",
                             "id"            =>  "tax",
                             "class"         =>  "form-control",
-                            "style"         =>  "", "required"      => "required", "title"         =>  $this->lang->line('tax'),
+                            "style"         =>  "",
+                            "required"      => "required",
+                            "title"         =>  $this->lang->line('tax'),
                             "value"         =>  set_value("tax", $tariff->tax),
                             "placeholder"   =>  $this->lang->line('tax')
                         );
@@ -215,7 +221,9 @@
                             "name"          =>  "late_deposit_fine",
                             "id"            =>  "late_deposit_fine",
                             "class"         =>  "form-control",
-                            "style"         =>  "", "required"      => "required", "title"         =>  $this->lang->line('late_deposit_fine'),
+                            "style"         =>  "",
+                            "required"      => "required",
+                            "title"         =>  $this->lang->line('late_deposit_fine'),
                             "value"         =>  set_value("late_deposit_fine", $tariff->late_deposit_fine),
                             "placeholder"   =>  $this->lang->line('late_deposit_fine')
                         );

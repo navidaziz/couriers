@@ -14,6 +14,7 @@
                                 INNER JOIN courier_services as cs ON(cs.courier_service_id = d.courier_service_id)
                                 INNER JOIN batches as b ON(b.batch_id = d.batch_id)
                                 WHERE d.rider_id = ? and d.delivery_status='Shipped'
+                                ORDER BY last_updated DESC
                                                 ";
         $rows = $this->db->query($query, [$rider_id])->result();
         foreach ($rows as $row) { ?>

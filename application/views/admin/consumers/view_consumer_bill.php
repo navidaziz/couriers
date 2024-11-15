@@ -10,7 +10,7 @@
                 <li>
                     <i class="fa fa-home"></i>
                     <a
-                        href="<?php echo site_url(ADMIN_DIR . $this->session->userdata("role_homepage_uri")); ?>"><?php echo $this->lang->line('Home'); ?></a>
+                        href="<?php echo site_url($this->session->userdata("role_homepage_uri")); ?>"><?php echo $this->lang->line('Home'); ?></a>
                 </li>
                 <li>
                     <i class="fa fa-table"></i>
@@ -190,16 +190,16 @@
 
                         <hr />
                         <style>
-                        .payable_table>thead>tr>th,
-                        .payable_table>tbody>tr>th,
-                        .payable_table>tfoot>tr>th,
-                        .payable_table>thead>tr>td,
-                        .payable_table>tbody>tr>td,
-                        .payable_table>tfoot>tr>td {
-                            border-color: black;
-                            color: black !important;
+                            .payable_table>thead>tr>th,
+                            .payable_table>tbody>tr>th,
+                            .payable_table>tfoot>tr>th,
+                            .payable_table>thead>tr>td,
+                            .payable_table>tbody>tr>td,
+                            .payable_table>tfoot>tr>td {
+                                border-color: black;
+                                color: black !important;
 
-                        }
+                            }
                         </style>
                         <table class="table table-bordered payable_table" id="consumer_monthly_bills_transposed">
                             <tbody>
@@ -247,23 +247,23 @@
                                 $rows = $this->db->query($query)->result();
                                 if ($rows) {
                                     foreach ($rows as $row) { ?>
-                                <tr>
-                                    <td></td>
-                                    <td><?php echo $count++ ?></td>
-                                    <td><?php echo $row->payment_date; ?></td>
-                                    <td><?php echo $row->amount_paid; ?></td>
-                                    <td><?php echo $row->payment_method; ?></td>
-                                    <td><?php echo $row->notes; ?></td>
-                                    <td>
-                                    </td>
-                                </tr>
-                                <?php }
+                                        <tr>
+                                            <td></td>
+                                            <td><?php echo $count++ ?></td>
+                                            <td><?php echo $row->payment_date; ?></td>
+                                            <td><?php echo $row->amount_paid; ?></td>
+                                            <td><?php echo $row->payment_method; ?></td>
+                                            <td><?php echo $row->notes; ?></td>
+                                            <td>
+                                            </td>
+                                        </tr>
+                                    <?php }
                                 } else { ?>
-                                <tr>
-                                    <td colspan="7" style="text-align: center;">
+                                    <tr>
+                                        <td colspan="7" style="text-align: center;">
 
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
                                 <?php } ?>
                             </tbody>
                         </table>

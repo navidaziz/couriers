@@ -9,7 +9,7 @@
             <ul class="breadcrumb">
                 <li>
                     <i class="fa fa-home"></i>
-                    <a href="<?php echo site_url(ADMIN_DIR . $this->session->userdata("role_homepage_uri")); ?>"><?php echo $this->lang->line('Home'); ?></a>
+                    <a href="<?php echo site_url($this->session->userdata("role_homepage_uri")); ?>"><?php echo $this->lang->line('Home'); ?></a>
                 </li>
                 <li>
                     <i class="fa fa-table"></i>
@@ -92,7 +92,9 @@
                             "name"          =>  "billing_month",
                             "id"            =>  "billing_month",
                             "class"         =>  "form-control",
-                            "style"         =>  "", "required"      => "required", "title"         =>  $this->lang->line('billing_month'),
+                            "style"         =>  "",
+                            "required"      => "required",
+                            "title"         =>  $this->lang->line('billing_month'),
                             "value"         =>  set_value("billing_month", $billing_month->billing_month),
                             "placeholder"   =>  $this->lang->line('billing_month')
                         );
@@ -122,7 +124,9 @@
                             "name"          =>  "meter_reading_start",
                             "id"            =>  "meter_reading_start",
                             "class"         =>  "form-control",
-                            "style"         =>  "", "required"      => "required", "title"         =>  $this->lang->line('meter_reading_start'),
+                            "style"         =>  "",
+                            "required"      => "required",
+                            "title"         =>  $this->lang->line('meter_reading_start'),
                             "value"         =>  set_value("meter_reading_start", $billing_month->meter_reading_start),
                             "placeholder"   =>  $this->lang->line('meter_reading_start')
                         );
@@ -152,7 +156,9 @@
                             "name"          =>  "meter_reading_end",
                             "id"            =>  "meter_reading_end",
                             "class"         =>  "form-control",
-                            "style"         =>  "", "required"      => "required", "title"         =>  $this->lang->line('meter_reading_end'),
+                            "style"         =>  "",
+                            "required"      => "required",
+                            "title"         =>  $this->lang->line('meter_reading_end'),
                             "value"         =>  set_value("meter_reading_end", $billing_month->meter_reading_end),
                             "placeholder"   =>  $this->lang->line('meter_reading_end')
                         );
@@ -182,7 +188,9 @@
                             "name"          =>  "billing_issue_date",
                             "id"            =>  "billing_issue_date",
                             "class"         =>  "form-control",
-                            "style"         =>  "", "required"      => "required", "title"         =>  $this->lang->line('billing_issue_date'),
+                            "style"         =>  "",
+                            "required"      => "required",
+                            "title"         =>  $this->lang->line('billing_issue_date'),
                             "value"         =>  set_value("billing_issue_date", $billing_month->billing_issue_date),
                             "placeholder"   =>  $this->lang->line('billing_issue_date')
                         );
@@ -212,7 +220,9 @@
                             "name"          =>  "billing_due_date",
                             "id"            =>  "billing_due_date",
                             "class"         =>  "form-control",
-                            "style"         =>  "", "required"      => "required", "title"         =>  $this->lang->line('billing_due_date'),
+                            "style"         =>  "",
+                            "required"      => "required",
+                            "title"         =>  $this->lang->line('billing_due_date'),
                             "value"         =>  set_value("billing_due_date", $billing_month->billing_due_date),
                             "placeholder"   =>  $this->lang->line('billing_due_date')
                         );

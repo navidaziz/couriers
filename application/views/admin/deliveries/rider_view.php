@@ -9,7 +9,7 @@
             <ul class="breadcrumb">
                 <li>
                     <i class="fa fa-home"></i>
-                    <a href="<?php echo site_url(ADMIN_DIR . $this->session->userdata("role_homepage_uri")); ?>"><?php echo $this->lang->line('Home'); ?></a>
+                    <a href="<?php echo site_url($this->session->userdata("role_homepage_uri")); ?>"><?php echo $this->lang->line('Home'); ?></a>
                 </li>
                 <li>
                     <i class="fa fa-table"></i>
@@ -103,7 +103,7 @@
             }
         </style>
 
-        <div class="box border blue" id="rider_assigned_list">
+        <div class="box border blue" style="overflow-y: scroll;" id="rider_assigned_list">
 
         </div>
 
@@ -134,7 +134,7 @@
     <?php $deliverys_status = array("Delivered", "Cancelled", "Onhold");
     foreach ($deliverys_status as $deliverys_status) { ?>
         <div class="col-sm-3">
-            <div class="box border blue" id="messenger" style="background-color:white; padding:4px; height:530px">
+            <div class="box border blue" id="messenger" style="background-color:white; padding:4px; height:530px; overflow-y: scroll;">
                 <div class="table-responsive">
                     <h4><?php echo $deliverys_status; ?> packages list</h4>
                     <table class="table table-bordered table_small" id="<?php echo $deliverys_status ?>">
@@ -152,7 +152,9 @@
                             $query = "SELECT d.*, cs.courier_service_name, cs.short_name, b.batch_no   FROM deliveries as d 
                                         INNER JOIN courier_services as cs ON(cs.courier_service_id = d.courier_service_id)
                                         INNER JOIN batches as b ON(b.batch_id = d.batch_id)
-                                        WHERE d.rider_id = ? and delivery_status = '" . $deliverys_status . "'";
+                                        WHERE d.rider_id = ? and delivery_status = '" . $deliverys_status . "'
+                                         ORDER BY last_updated DESC
+                                        ";
                             $rows = $this->db->query($query, [$rider->user_id])->result();
                             foreach ($rows as $row) {
                                 $delivery_ids[] = $row->delivery_id;
