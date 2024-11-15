@@ -12,8 +12,7 @@ class MY_Controller extends CI_Controller
         parent::__construct();
         $this->data['site_name'] = config_item("site_name");
         $this->data['errors'] = array();
-        // date_default_timezone_set("Asia/karachi");
-
+        date_default_timezone_set("Asia/karachi");
     }
     //-----------------------------------------------------------------------
 
