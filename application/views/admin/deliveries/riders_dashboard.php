@@ -58,6 +58,7 @@
      $(document).ready(function() {
          $('#datatable').DataTable({
              dom: 'Bfrtip', // Add 'f' for the search filter.
+             paging: false,
              buttons: [{
                      extend: 'copy',
                      title: title
