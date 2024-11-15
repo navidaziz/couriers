@@ -83,6 +83,7 @@
                 margin: 0;
                 box-shadow: 0;
                 color: black;
+                width: 99% !important;
 
             }
 
@@ -237,33 +238,33 @@
     <page size='A4'>
 
         <div class="print-page-header" style="background-color: rgb(229, 228, 226) !important;">
-            <table style="width:100%">
-                <tr>
-                    <td style="padding-top: 10px; width: 90px !important;">
-                        <img src="<?php echo site_url("assets/uploads/" . $system_global_settings[0]->sytem_admin_logo); ?>" alt="<?php echo $system_global_settings[0]->system_title ?>" title="<?php echo $system_global_settings[0]->system_title ?>" style="width:80px !important" />
-                    </td>
-                    <td style="vertical-align: top; text-align:center; margin-right:10px; ">
-                        <h4 style="color:black; font-weight: bold"><?php echo $system_global_settings[0]->system_title ?> </h4>
-                        <small><strong><?php echo $system_global_settings[0]->phone_number; ?> - <?php echo $system_global_settings[0]->mobile_number; ?> </strong></small>
-                        <h5 style="color:black; font-weight: bold; margin-left:10px;"><?php echo $courier_service->courier_service_name; ?></h5>
 
-                    </td>
-                    <td style="padding-top: 10px; width: 90px !important;">
-                        <img src="<?php echo base_url("assets/uploads/" . $courier_service->logo); ?>" style="width:80px !important" />
-
-                    </td>
-                </tr>
-
-            </table>
         </div>
 
 
-        <div style="padding-left: 40px; padding-right: 40px; padding-top:0px !important;" contenteditable="true">
+        <div style="padding-left: 20px; padding-right: 16px; padding-top:10px !important;" contenteditable="true">
             <table style="width: 100%;" style="color:black">
                 <thead>
                     <tr>
                         <th style="text-align: center;">
-                            <div class="print-page-header-space"></div>
+                            <table style="width:100%">
+                                <tr>
+                                    <td style="padding-top: 10px; width: 90px !important;">
+                                        <img src="<?php echo site_url("assets/uploads/" . $system_global_settings[0]->sytem_admin_logo); ?>" alt="<?php echo $system_global_settings[0]->system_title ?>" title="<?php echo $system_global_settings[0]->system_title ?>" style="width:80px !important" />
+                                    </td>
+                                    <td style="vertical-align: top; text-align:center; margin-right:10px; ">
+                                        <h4 style="color:black; font-weight: bold"><?php echo $system_global_settings[0]->system_title ?> </h4>
+                                        <small><strong><?php echo $system_global_settings[0]->phone_number; ?> - <?php echo $system_global_settings[0]->mobile_number; ?> </strong></small>
+                                        <h5 style="color:black; font-weight: bold; margin-left:10px;"><?php echo $courier_service->courier_service_name; ?></h5>
+
+                                    </td>
+                                    <td style="padding-top: 10px; width: 90px !important;">
+                                        <img src="<?php echo base_url("assets/uploads/" . $courier_service->logo); ?>" style="width:80px !important" />
+
+                                    </td>
+                                </tr>
+
+                            </table>
 
                             <hr style="margin: 2px;" />
                         </th>
@@ -338,37 +339,23 @@
 
                                             <?php } ?>
                                             </tr>
-                                        <?php } ?>
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th>Total Packages: <?php echo ($count - 1); ?></th>
-                                            <th style="text-align: right;">Total: </th>
-                                            <th><?php echo $total_amount; ?></th>
-                                        </tr>
-                                        <?php if ($status->delivery_status == 'Completed') {
-                                            $query = "SELECT SUM(p.paid_amount) as total
-                                        FROM payments AS p
-                                        WHERE p.batch_id = '" . $batch->batch_id . "' 
-                                        AND p.courier_service_id = '" . $courier_service->courier_service_id . "'";
-                                            $paid = $this->db->query($query)->row();
-                                        ?>
                                             <tr>
                                                 <th></th>
                                                 <th></th>
                                                 <th></th>
-                                                <th></th>
-                                                <th></th>
-                                                <th style="text-align: right;">Paid: </th>
-                                                <th><?php echo $paid->total; ?></th>
+                                                <th style="text-align: right;">Total Packages:</th>
+                                                <th><?php echo ($count - 1); ?></th>
+                                                <th style="text-align: right;">Total: </th>
+                                                <th><?php echo $total_amount; ?></th>
                                             </tr>
+
                                         <?php } ?>
-                                    </tfoot>
+
+
+
+                                    </tbody>
                                 </table>
+
                                 <strong>Payments</strong>
                                 <table class="table table-bordered table_medium" id="payments">
                                     <thead>
@@ -435,6 +422,8 @@
                         $batch_status = $this->db->query($query, [$batch->batch_id, $batch->batch_id])->row();
 
                         ?>
+
+
                         <strong>Summary</strong>
                         <table class="table table-bordered">
                             <tr>
@@ -486,36 +475,33 @@
                 <tfoot>
                     <tr>
                         <td>
-                            <div class="page-footer-space"></div>
+                            <p style="text-align: center;">
+                                <small>
+                                    <strong><?php echo $system_global_settings[0]->address ?></strong>
+
+                                    <br />
+                                    Print @ <?php echo date("d M, Y h:m:s A"); ?>
+                                    by
+                                    <?php
+                                    $query = "SELECT
+                                `roles`.`role_title`,
+                                `users`.`name`  
+                                FROM `roles`,
+                                `users` 
+                                WHERE `roles`.`role_id` = `users`.`role_id`
+                                AND `users`.`user_id`='" . $this->session->userdata("userId") . "'";
+                                    $user_data = $this->db->query($query)->row();
+
+                                    ?>
+                                    <?php echo $user_data->name; ?> (<?php echo $user_data->role_title; ?>)
+                                </small>
+                            </p>
                         </td>
                     </tr>
                 </tfoot>
             </table>
         </div>
-        <div class="page-footer" style="background-color: rgb(229, 228, 226) !important; border:1px solid rgb(229, 228, 226); text-align:center">
 
-            <small>
-                <strong><?php echo $system_global_settings[0]->address ?></strong>
-
-                <br />
-                Print @ <?php echo date("d M, Y h:m:s A"); ?>
-                by
-                <?php
-                $query = "SELECT
-                `roles`.`role_title`,
-                `users`.`name`  
-            FROM `roles`,
-            `users` 
-            WHERE `roles`.`role_id` = `users`.`role_id`
-            AND `users`.`user_id`='" . $this->session->userdata("userId") . "'";
-                $user_data = $this->db->query($query)->row();
-
-                ?>
-                <?php echo $user_data->name; ?> (<?php echo $user_data->role_title; ?>)
-            </small>
-
-
-        </div>
     </page>
 </body>
 
