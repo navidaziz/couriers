@@ -199,14 +199,15 @@
                     <div class="table-responsive">
                         <h4>Packages List</h4>
                         <?php
-                        $query = "SELECT d.delivery_status FROM deliveries as d 
-                        WHERE batch_id = '" . $batch->batch_id . "'
-                        GROUP BY d.delivery_status ";
-                        $statuses = $this->db->query($query)->result();
+                        // $query = "SELECT d.delivery_status FROM deliveries as d 
+                        // WHERE batch_id = '" . $batch->batch_id . "'
+                        // GROUP BY d.delivery_status ";
+                        // $statuses = $this->db->query($query)->result();
                         //var_dump($statuses);
-                        foreach ($statuses as $status) { ?>
-                            <strong><?php echo $status->delivery_status; ?></strong>
-                            <table class="table table-bordered table_medium" id="deliveries">
+                        $delivery_status  = array("Pending", "Shipped", "Onhold", "Delivered", "Cancelled", "Returned", "Completed");
+                        foreach ($delivery_status as $d_status) { ?>
+                            <strong><?php echo $d_status; ?></strong>
+                            <table class="table table-bordered table_medium deliveries_datatable" id="deliveries">
                                 <thead>
                                     <th>#</th>
                                     <th>Tracking No.</th>
@@ -217,7 +218,7 @@
 
                                     <th>Delivery Status</th>
                                     <th>Amount</th>
-                                    <?php if ($status->delivery_status == 'Pending' or $status->delivery_status == 'Cancelled') { ?>
+                                    <?php if ($d_status == 'Pending' or $d_status == 'Cancelled') { ?>
                                         <th>Action</th>
                                     <?php } ?>
                                 </thead>
@@ -228,7 +229,7 @@
                                     $query = "SELECT d.*, cs.courier_service_name, cs.short_name, b.batch_no   FROM deliveries as d 
                                 INNER JOIN courier_services as cs ON(cs.courier_service_id = d.courier_service_id)
                                 INNER JOIN batches as b ON(b.batch_id = d.batch_id)
-                                WHERE d.delivery_status = '" . $status->delivery_status . "'
+                                WHERE d.delivery_status = '" . $d_status . "'
                                 AND d.batch_id = '" . $batch->batch_id . "' ";
                                     $rows = $this->db->query($query)->result();
                                     foreach ($rows as $row) { ?>
@@ -243,11 +244,11 @@
                                             <td><?php echo $row->amount;
                                                 $total_amount += $row->amount;
                                                 ?></td>
-                                            <?php if ($status->delivery_status == 'Pending') { ?>
+                                            <?php if ($d_status == 'Pending') { ?>
                                                 <td><button onclick="get_delivery_form('<?php echo $row->delivery_id; ?>')">Edit<botton>
                                                 </td>
                                             <?php } ?>
-                                            <?php if ($status->delivery_status == 'Cancelled') { ?>
+                                            <?php if ($d_status == 'Cancelled') { ?>
                                                 <td>
                                                     <form method="post" action="<?php echo site_url(ADMIN_DIR . "courier_services/return_item"); ?>"
                                                         onsubmit="return confirm('Are you sure you want to return the item?');">
@@ -271,8 +272,11 @@
                                         <th><?php echo ($count - 1); ?></th>
                                         <th style="text-align: right;">Total: </th>
                                         <th><?php echo $total_amount; ?></th>
+                                        <?php if ($d_status == 'Pending' or $d_status == 'Cancelled') { ?>
+                                            <th></th>
+                                        <?php } ?>
                                     </tr>
-                                    <?php if ($status->delivery_status == 'Completed') {
+                                    <?php if ($d_status == 'Completed') {
                                         $query = "SELECT SUM(p.paid_amount) as total
                                         FROM payments AS p
                                         WHERE p.batch_id = '" . $batch->batch_id . "' 
@@ -289,10 +293,20 @@
                                             <th style="text-align: right;">Paid: </th>
                                             <th><?php echo $paid->total; ?></th>
                                         </tr>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th style="text-align: right;">remaining: </th>
+                                            <th><?php echo $total_amount - $paid->total; ?></th>
+                                        </tr>
                                     <?php } ?>
                                 </tfoot>
                             </table>
-                            <?php if ($status->delivery_status == 'Completed') { ?>
+                            <?php if ($d_status == 'Completed') { ?>
                                 <strong>Payments</strong>
                                 <table class="table table-bordered table_medium" id="payments">
                                     <thead>
@@ -378,15 +392,9 @@
                     <?php
                     $query = "SELECT 
                         COUNT(*) as total_packages,
-                        SUM(amount) as total_amount,
-                        SUM(IF(delivery_status = 'Completed', 1, 0)) as total_delivered,
-                        SUM(IF(delivery_status = 'Completed', amount, 0)) as total_delivered_amount,
-                        SUM(IF(delivery_status = 'Returned', 1, 0)) as total_cancelled,
-                        SUM(IF(delivery_status = 'Returned', amount, 0)) as total_cancelled_amount,
-                        (SELECT SUM(paid_amount) FROM payments WHERE batch_id = ?) as paid_amount
-                    FROM deliveries 
+                        SUM(amount) as total_amount FROM deliveries 
                     WHERE batch_id = ?";
-                    $batch_status = $this->db->query($query, [$batch->batch_id, $batch->batch_id])->row();
+                    $batch_status = $this->db->query($query, [$batch->batch_id])->row();
 
                     ?>
                     <strong>Summary</strong>
@@ -394,30 +402,89 @@
                         <tr>
                             <th></th>
                             <th>Received</th>
-                            <th>Returned</th>
-                            <th>Delivered</th>
-                            <th>Payable / Paid</th>
+                            <?php foreach ($delivery_status as $d_status) { ?>
+                                <th><?php echo $d_status; ?></th>
+                            <?php } ?>
                         </tr>
                         <tr>
                             <th>Total</th>
                             <th><?php echo $batch_status->total_packages; ?></th>
-                            <th><?php echo $batch_status->total_cancelled; ?></th>
-                            <th><?php echo $batch_status->total_delivered; ?></th>
-                            <th><?php echo $batch_status->total_delivered_amount; ?></th>
+                            <?php foreach ($delivery_status as $d_status) {
+                                $query = "SELECT 
+                                    COUNT(*) as total
+                                FROM deliveries 
+                                WHERE batch_id = ?
+                                AND delivery_status = '" . $d_status . "'";
+                                $packages = $this->db->query($query, [$batch->batch_id])->row();
+                            ?>
+                                <th><?php echo $packages->total; ?></th>
+                            <?php } ?>
                         </tr>
                         <tr>
                             <th>Amount</th>
                             <th><?php echo $batch_status->total_amount; ?></th>
-                            <th><?php echo $batch_status->total_cancelled_amount; ?></th>
-                            <th><?php echo $batch_status->total_delivered_amount; ?></th>
-                            <th><?php echo $batch_status->paid_amount; ?></th>
+                            <?php foreach ($delivery_status as $d_status) {
+                                $query = "SELECT 
+                                    SUM(amount) as total
+                                FROM deliveries 
+                                WHERE batch_id = ?
+                                AND delivery_status = '" . $d_status . "'";
+                                $amount = $this->db->query($query, [$batch->batch_id])->row();
+                            ?>
+                                <th><?php echo $amount->total; ?></th>
+                            <?php } ?>
+                        </tr>
+                        <tr>
+
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>Paid</th>
+                            <th><?php
+                                $query = "SELECT SUM(p.paid_amount) as total
+                                        FROM payments AS p
+                                        WHERE p.batch_id = '" . $batch->batch_id . "' 
+                                        AND p.courier_service_id = '" . $courier_service->courier_service_id . "'";
+                                $paid = $this->db->query($query)->row();
+                                echo $paid->total; ?></th>
+
+                        </tr>
+                        <tr>
+
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>Remaining</th>
+                            <th><?php
+                                $query = "SELECT 
+                                    SUM(amount) as total
+                                FROM deliveries 
+                                WHERE batch_id = ?
+                                AND delivery_status = 'Completed'";
+                                $completed_amount = $this->db->query($query, [$batch->batch_id])->row();
+                                echo $amount->total - $paid->total; ?>
+                            </th>
+
                         </tr>
                     </table>
 
                     <?php
-
-                    if (($batch_status->total_packages == ($batch_status->total_cancelled + $batch_status->total_delivered)) and
-                        $batch_status->paid_amount == $batch_status->total_delivered_amount
+                    $query = "SELECT 
+                                    COUNT(amount) as total
+                                FROM deliveries 
+                                WHERE batch_id = ?
+                                AND delivery_status IN('Completed', 'Returned')";
+                    $completed_and_returned = $this->db->query($query, [$batch->batch_id])->row();
+                    if (($batch_status->total_packages == $completed_and_returned->total) and
+                        $paid->total == $completed_amount->total
                         and $batch_status->total_packages > 0
                     ) { ?>
                         <?php if ($batch->payment_status == 'Unpaid') { ?>
@@ -490,3 +557,35 @@
         </div>
         <!-- /MESSENGER -->
     </div>
+
+    <script>
+        title = ' <?php echo $batch->courier_service_name; ?> - Batch No: <?php echo $batch->batch_no; ?> (<?php echo $batch->batch_date; ?>) -   <?php echo date('Y-m-d h:m:s') ?> ';
+        $(document).ready(function() {
+            $('.deliveries_datatable').DataTable({
+                dom: 'Bfrtip', // Add 'f' for the search filter.
+                paging: false,
+                buttons: [{
+                        extend: 'copy',
+                        title: title
+                    },
+                    {
+                        extend: 'csv',
+                        title: title
+                    },
+                    {
+                        extend: 'excel',
+                        title: title
+                    },
+                    {
+                        extend: 'pdf',
+                        title: title
+                    },
+                    {
+                        extend: 'print',
+                        title: title
+                    }
+                ],
+                searching: true // Optional, enabled by default.
+            });
+        });
+    </script>

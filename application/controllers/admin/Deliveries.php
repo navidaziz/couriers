@@ -286,7 +286,7 @@ class Deliveries extends Admin_Controller
         $sql = "SELECT deliveries.*, cs.short_name as courier_service_name, b.batch_no as batch_no, u.name as rider_name FROM deliveries  
                 INNER JOIN courier_services as cs ON(cs.courier_service_id = deliveries.courier_service_id)
                 INNER JOIN batches as b ON(b.batch_id = deliveries.batch_id)
-                INNER JOIN users as u ON(u.user_id = deliveries.rider_id)
+                LEFT JOIN users as u ON(u.user_id = deliveries.rider_id)
                 WHERE deliveries.delivery_status = " . $delivery_status . "";
 
         // Searching
@@ -455,9 +455,9 @@ class Deliveries extends Admin_Controller
             } else {
                 $query = "SELECT users.name, roles.role_title FROM users 
                     INNER JOIN roles ON (roles.role_id = users.role_id)
-                    WHERE user_id = $rider_id";
+                    WHERE user_id = $delivery->rider_id";
                 $rider = $this->db->query($query)->row();
-                echo 'Tracking No. (<strong>' . $delivery->tracking_number . '</strong>) Allready assigned to rider. ' . $rider->name . '(' . $rider->role_title . ')';
+                echo 'Tracking No. <strong>( ' . $delivery->tracking_number . ' ) <br />Status: ' . $delivery->delivery_status . '</strong><br /> Already assigned to:<strong> ' . $rider->name . ' (' . $rider->role_title . ') </strong>';
             }
         } else {
             return 'Package Not Found';
@@ -533,6 +533,9 @@ class Deliveries extends Admin_Controller
     public function seacrch_by_tracking_no()
     {
         $tracking_no = $this->input->post('tracking_no');
+        $parts = explode(",", $tracking_no); // Split the string by commas
+        $tracking_no = trim($parts[0]); // Get the first part and remove any extra spaces
+
         $rider_id = (int) $this->input->post('rider_id');
         $query = "SELECT * FROM deliveries WHERE tracking_number = ?";
         $delivery = $this->db->query($query, [$tracking_no])->row();

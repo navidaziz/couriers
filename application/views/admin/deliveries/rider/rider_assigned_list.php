@@ -1,5 +1,18 @@
+<style>
+    #riderassignedlist_filter input {
+        width: 130px;
+    }
+</style>
+
 <h4>New assigned packages</h4>
-<table class="table table-bordered table_small" id="deliveries">
+<?php
+$query = "SELECT COUNT(*) as total_packages, SUM(amount) as total_amount   
+FROM deliveries WHERE rider_id = ? and delivery_status='Shipped'";
+$rider_delivery = $this->db->query($query, [$rider_id])->row();
+?>
+<strong>Packages: <?php echo $rider_delivery->total_packages  ?></strong> -
+<strong>Amount: <?php echo $rider_delivery->total_amount  ?> </strong> Rs.
+<table class="table table-bordered table_small" id="riderassignedlist">
     <thead>
         <th>#</th>
         <th>Tracking No.</th>
@@ -20,20 +33,20 @@
         foreach ($rows as $row) { ?>
             <tr>
                 <td><?php echo $count++ ?></td>
-                <td><?php echo $row->tracking_number; ?>
+                <td style="vertical-align: middle;"><strong><?php echo $row->tracking_number; ?></strong>
                     <form method="post" action="<?php echo site_url(ADMIN_DIR . "deliveries/remove_rider_assigned_package"); ?>"
                         onsubmit="return confirm('Are you sure you want to remove this assigned package?');">
                         <input type="hidden" value="<?php echo $row->rider_id; ?>" name="rider_id" />
                         <input type="hidden" value="<?php echo $row->delivery_id; ?>" name="delivery_id" />
-                        <button>Remove</button>
+                        <button class="btn btn-link btn-sm">Remove</button>
                     </form>
                 </td>
                 <td><?php echo $row->recipient_name; ?><br />
                     <?php echo $row->recipient_address; ?><br />
                     <?php echo $row->recipient_contact; ?></td>
-                <td><?php
+                <th><?php
                     $total_amount += $row->amount;
-                    echo $row->amount; ?></td>
+                    echo $row->amount; ?></th>
 
             </tr>
         <?php } ?>

@@ -39,10 +39,14 @@
                     <ul class="nav nav-tabs">
 
                         <?php
-                        $query = "SELECT delivery_status, COUNT(delivery_status) as total FROM deliveries ";
-                        $query .= " GROUP BY delivery_status";
-                        $delivery_status = $this->db->query($query)->result();
-                        foreach ($delivery_status as $deliverystatus) { ?>
+                        //$delivery_status  = array("Pending", "Shipped", "Onhold", "Delivered", "Cancelled", "Completed");
+                        $delivery_status  = array("Completed", "Cancelled", "Delivered", "Onhold", "Shipped", "Pending");
+                        foreach ($delivery_status as $d_status) { ?>
+
+                            <?php $query = "SELECT delivery_status, COUNT(delivery_status) as total 
+                            FROM deliveries WHERE delivery_status =  '" . $d_status . "'";
+                            $deliverystatus = $this->db->query($query)->row();
+                            ?>
 
                             <li style="" <?php if ($deliverystatus->delivery_status == $tab) { ?> class="active" <?php } ?>>
 
