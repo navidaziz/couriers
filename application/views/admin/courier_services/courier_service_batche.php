@@ -300,7 +300,7 @@
                                             <th></th>
                                             <th></th>
                                             <th></th>
-                                            <th style="text-align: right;">remaining: </th>
+                                            <th style="text-align: right;">Remaining: </th>
                                             <th><?php echo $total_amount - $paid->total; ?></th>
                                         </tr>
                                     <?php } ?>
