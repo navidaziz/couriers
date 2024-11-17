@@ -86,94 +86,86 @@
 <div class="row">
     <div class="col-sm-3">
         <div id="errorDiv" class="box border blue" id="messenger" style="background-color:white; padding:4px; ">
-            <div class="table-responsive">
-                <table class="table">
-                    <tr>
-                        <td>Search by Tracking No: <br />
-                            <input class="form-control" type="text" id="tracking_no" placeholder="Scan barcode here" autofocus>
-                            <div style="color:red" id="tracking_no_response"></div>
-                        </td>
-                    </tr>
-                </table>
-                <div id="rider_assigned_packages"></div>
+            Search by Tracking No: <br />
+            <input class="form-control" type="text" id="tracking_no" placeholder="Scan barcode here" autofocus>
+            <div style="margin-top: 5px;" id="tracking_no_response"></div>
+            <hr />
+            <div style="height: 425px; overflow-y: scroll; margin-top: 10px" id="rider_assigned_list">
+
             </div>
-
-            <script>
-                // Function to handle the barcode data
-                function handleBarcode(barcode) {
-                    alert("Barcode Scanned: " + barcode);
-                    // Additional processing can be added here
-                }
-
-                // Add event listener for the input field
-                const barcodeInput = document.getElementById('tracking_no');
-                barcodeInput.addEventListener('keyup', function(event) {
-                    $('#tracking_no_response').html('');
-                    if (event.key === 'Enter') {
-                        var tracking_no = $('#tracking_no').val();
-                        $.ajax({
-                            type: 'POST',
-                            url: '<?php echo site_url(ADMIN_DIR . "deliveries/seacrch_by_tracking_no"); ?>', // URL to submit form data
-                            data: {
-                                tracking_no: tracking_no,
-                                rider_id: '<?php echo $rider->user_id; ?>'
-                            },
-                            success: function(response) {
-
-                                if (response == 'success') {
-                                    $('#tracking_no').val('');
-                                    get_rider_assigned_list();
-                                    //location.reload();
-                                } else {
-
-                                    $('#tracking_no_response').fadeOut(200, function() {
-                                        $(this).html(response).fadeIn(200);
-                                    });
-                                    triggerBuzz('errorDiv');
-                                }
-
-
-                            }
-                        });
-                    }
-                });
-            </script>
-        </div>
-        <style>
-            #rider_assigned_list {
-                background-color: white;
-                padding: 4px;
-                height: 405px
-            }
-        </style>
-
-        <div class="box border blue" style="overflow-y: scroll;" id="rider_assigned_list">
-
         </div>
 
         <script>
-            function get_rider_assigned_list() {
-
-                $.ajax({
-                    type: 'POST',
-                    url: '<?php echo site_url(ADMIN_DIR . "deliveries/get_rider_assigned_list"); ?>', // URL to submit form data
-                    data: {
-                        rider_id: '<?php echo $rider->user_id; ?>'
-                    },
-                    success: function(response) {
-                        //alert(response);
-                        $('#rider_assigned_list').html(response);
-                        // $('#rider_assigned_list').fadeOut(200, function() {
-                        //     $(this).html(response).fadeIn(200);
-
-                        // });
-                    }
-                });
+            // Function to handle the barcode data
+            function handleBarcode(barcode) {
+                alert("Barcode Scanned: " + barcode);
+                // Additional processing can be added here
             }
-            get_rider_assigned_list();
-        </script>
 
+            // Add event listener for the input field
+            const barcodeInput = document.getElementById('tracking_no');
+            barcodeInput.addEventListener('keyup', function(event) {
+                $('#tracking_no_response').html('');
+                if (event.key === 'Enter') {
+                    var tracking_no = $('#tracking_no').val();
+                    $.ajax({
+                        type: 'POST',
+                        url: '<?php echo site_url(ADMIN_DIR . "deliveries/seacrch_by_tracking_no"); ?>', // URL to submit form data
+                        data: {
+                            tracking_no: tracking_no,
+                            rider_id: '<?php echo $rider->user_id; ?>'
+                        },
+                        success: function(response) {
+
+                            if (response == 'success') {
+                                $('#tracking_no').val('');
+                                $('#tracking_no_response').fadeOut(200, function() {
+                                    $(this).html('<div class="alert alert-success">Tracking ID: <strong>' + tracking_no + '</strong> <br />Assigned Successfully.</div>').fadeIn(200);
+                                });
+                                get_rider_assigned_list();
+                                //location.reload();
+                            } else {
+
+                                $('#tracking_no_response').fadeOut(200, function() {
+                                    $(this).html('<div class="alert alert-danger">' + response + '</div>').fadeIn(200);
+                                });
+                                triggerBuzz('errorDiv');
+                            }
+
+
+                        }
+                    });
+                }
+            });
+        </script>
     </div>
+
+
+
+
+    <script>
+        function get_rider_assigned_list() {
+
+            $.ajax({
+                type: 'POST',
+                url: '<?php echo site_url(ADMIN_DIR . "deliveries/get_rider_assigned_list"); ?>', // URL to submit form data
+                data: {
+                    rider_id: '<?php echo $rider->user_id; ?>'
+                },
+                success: function(response) {
+                    //alert(response);
+                    $('#rider_assigned_list').html(response);
+                    // $('#rider_assigned_list').fadeOut(200, function() {
+                    //     $(this).html(response).fadeIn(200);
+
+                    // });
+                }
+            });
+        }
+        get_rider_assigned_list();
+    </script>
+
+
 
     <?php $deliverys_status = array("Delivered",  "Onhold", "Cancelled");
     foreach ($deliverys_status as $deliverys_status) { ?>
@@ -184,7 +176,7 @@
                     <?php
                     $query = "SELECT COUNT(*) as total_packages, SUM(amount) as total_amount   
                     FROM deliveries WHERE rider_id = ? and delivery_status='" . $deliverys_status . "'";
-                    $rider_delivery = $this->db->query($query, [$rider_id])->row();
+                    $rider_delivery = $this->db->query($query, [$rider->user_id])->row();
                     ?>
                     <strong>Packages: <?php echo $rider_delivery->total_packages  ?></strong> -
                     <strong>Amount: <?php echo $rider_delivery->total_amount  ?> </strong> Rs.
