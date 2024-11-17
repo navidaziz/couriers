@@ -96,6 +96,7 @@ class Rider_app extends Admin_Controller
             $inputs['cancelled_date'] =  date('Y-m-d H:i:s');
             $inputs['delivery_status'] = 'Cancelled';
             $inputs['cancelled_reason'] = $cancelled_reason =  $this->input->post('cancelled_reason');
+            $inputs['cancelled_by'] = $this->session->userdata("userId");
             $this->db->where("delivery_id", $delivery_id);
             $inputs["last_updated"] = date('Y-m-d H:i:s');
             if ($this->db->update("deliveries", $inputs)) {

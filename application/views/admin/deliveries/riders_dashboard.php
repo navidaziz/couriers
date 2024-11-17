@@ -1,3 +1,53 @@
+<div>
+    <div id="errorDiv" class="box border blue" id="messenger" style="background-color:white; padding:4px; text-align:right ">
+        Search Package by Tracking No:
+        <input class="form-control" style="width: 200px; display:inline" type="text" id="tracking_no" placeholder="Scan barcode here" autofocus>
+
+    </div>
+    <div style="margin-top: 5px;" id="tracking_no_response"></div>
+    <script>
+        // Function to handle the barcode data
+        function handleBarcode(barcode) {
+            alert("Barcode Scanned: " + barcode);
+            // Additional processing can be added here
+        }
+
+        // Add event listener for the input field
+        const barcodeInput = document.getElementById('tracking_no');
+        barcodeInput.addEventListener('keyup', function(event) {
+            $('#tracking_no_response').html('');
+            if (event.key === 'Enter') {
+                var tracking_no = $('#tracking_no').val();
+                $.ajax({
+                    type: 'POST',
+                    url: '<?php echo site_url(ADMIN_DIR . "deliveries/seacrch_by_tracking_no_package_status"); ?>', // URL to submit form data
+                    data: {
+                        tracking_no: tracking_no
+                    },
+                    success: function(response) {
+
+                        if (response != 'not_found') {
+                            $('#tracking_no').val('');
+                            $('#tracking_no_response').fadeOut(200, function() {
+                                $(this).html(response).fadeIn(200);
+                            });
+                            //get_rider_assigned_list();
+                            //location.reload();
+                        } else {
+
+                            $('#tracking_no_response').fadeOut(200, function() {
+                                $(this).html('<div class="alert alert-danger">Tracking No: <strong>' + tracking_no + '</strong> Not Found. Try Again</div>').fadeIn(200);
+                            });
+                            triggerBuzz('errorDiv');
+                        }
+
+
+                    }
+                });
+            }
+        });
+    </script>
+</div>
 <h4>Rider Delivery Tracking Dashboard</h4>
 <table id="datatable" class="table  table-bordered">
     <thead>

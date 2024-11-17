@@ -530,6 +530,30 @@ class Deliveries extends Admin_Controller
         redirect(ADMIN_DIR . "deliveries/rider_view/" . $rider_id);
     }
 
+
+    public function seacrch_by_tracking_no_package_status()
+    {
+        $tracking_no = $this->input->post('tracking_no');
+        $parts = explode(",", $tracking_no); // Split the string by commas
+        $tracking_no = trim($parts[0]); // Get the first part and remove any extra spaces
+
+        $rider_id = (int) $this->input->post('rider_id');
+        $query = "SELECT * FROM deliveries WHERE tracking_number = ?";
+        $delivery = $this->db->query($query, [$tracking_no])->row();
+        if ($delivery) {
+            $query = "SELECT d.*, cs.courier_service_name as cs_name, b.batch_no  
+            FROM deliveries as d  
+            INNER JOIN courier_services as cs ON(cs.courier_service_id = d.courier_service_id)
+            INNER JOIN batches as b ON(b.batch_id = d.batch_id)
+            WHERE d.tracking_number = ?";
+            $this->data['delivery'] = $this->db->query($query, [$tracking_no])->row();
+            $this->load->view(ADMIN_DIR . "deliveries/package_status", $this->data);
+        } else {
+            echo 'not_found';
+        }
+    }
+
+
     public function seacrch_by_tracking_no()
     {
         $tracking_no = $this->input->post('tracking_no');
