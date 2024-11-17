@@ -283,7 +283,7 @@ class Deliveries extends Admin_Controller
 
         $search = $this->db->escape("%" . $this->input->post("search")["value"] . "%");
         // Manual SQL query building
-        $sql = "SELECT deliveries.*, cs.short_name as courier_service_name, b.batch_no as batch_no, b.payment_status  as batch_payment_status, u.name as rider_name FROM deliveries  
+        $sql = "SELECT DISTINCT  deliveries.*, cs.short_name as courier_service_name, b.batch_no as batch_no, b.payment_status  as batch_payment_status, u.name as rider_name FROM deliveries  
                 INNER JOIN courier_services as cs ON(cs.courier_service_id = deliveries.courier_service_id)
                 INNER JOIN batches as b ON(b.batch_id = deliveries.batch_id)
                 LEFT JOIN users as u ON(u.user_id = deliveries.rider_id)
