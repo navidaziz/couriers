@@ -254,9 +254,9 @@ class Deliveries extends Admin_Controller
         $columns[] = "recipient_name";
         $columns[] = "expected_delivery_date";
         $columns[] = "amount";
-        $columns[] = "payment_status";
+        // $columns[] = "payment_status";
         $columns[] = "courier_notes";
-        $columns[] = "rider_name";
+        // $columns[] = "rider_name";
         $columns[] = "assigned_date";
         $columns[] = "delivery_status";
         $columns[] = "delivered_date";
@@ -283,19 +283,19 @@ class Deliveries extends Admin_Controller
 
         $search = $this->db->escape("%" . $this->input->post("search")["value"] . "%");
         // Manual SQL query building
-        $sql = "SELECT deliveries.*, cs.short_name as courier_service_name, b.batch_no as batch_no, u.name as rider_name FROM deliveries  
+        $sql = "SELECT deliveries.*, cs.short_name as courier_service_name, b.batch_no as batch_no, b.payment_status  as batch_payment_status, u.name as rider_name FROM deliveries  
                 INNER JOIN courier_services as cs ON(cs.courier_service_id = deliveries.courier_service_id)
                 INNER JOIN batches as b ON(b.batch_id = deliveries.batch_id)
                 LEFT JOIN users as u ON(u.user_id = deliveries.rider_id)
-                WHERE deliveries.delivery_status = " . $delivery_status . "";
+                WHERE deliveries.delivery_status = " . $delivery_status . " ";
 
         // Searching
         if (!empty($this->input->post("search")["value"])) {
-            //$sql .= " WHERE ";
+            $sql .= " AND ";
             foreach ($columns as $column) {
-                $sql .= "$column LIKE $search OR ";
+                $sql .= " $column LIKE $search OR ";
             }
-            $sql = rtrim($sql, "OR "); // Remove the last "OR"
+            $sql = rtrim($sql, " OR "); // Remove the last "OR"
         }
 
         // Ordering

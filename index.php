@@ -57,8 +57,8 @@
 $hostname = $_SERVER['HTTP_HOST'];
 
 if ($hostname === 'localhost' || $hostname === '127.0.0.1') {
-	//define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
-	define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'production');
+	define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
+	//define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'production');
 } else {
 	//define('ENVIRONMENT', 'production');
 	define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'production');
@@ -76,7 +76,7 @@ if ($hostname === 'localhost' || $hostname === '127.0.0.1') {
 switch (ENVIRONMENT) {
 	case 'development':
 
-		error_reporting(-1);
+		//error_reporting(-1);
 		ini_set('display_errors', 1);
 		break;
 
