@@ -215,7 +215,7 @@
                                     <th>Recipient Address</th>
                                     <th>Recipient Contact</th>
                                     <th>Verified</th>
-
+                                    <th>Rider</th>
                                     <th>Delivery Status</th>
                                     <th>Amount</th>
                                     <?php if ($d_status == 'Pending' or $d_status == 'Cancelled') { ?>
@@ -240,6 +240,18 @@
                                             <td><?php echo $row->recipient_address; ?></td>
                                             <td><?php echo $row->recipient_contact; ?></td>
                                             <td><?php echo $row->verified; ?></td>
+                                            <th>
+                                                <?php
+                                                if ($row->rider_id) {
+                                                    $query = "SELECT users.name, roles.role_title FROM users
+                                                    INNER JOIN roles ON (roles.role_id = users.role_id)
+                                                    WHERE user_id = $row->rider_id";
+                                                    $rider = $this->db->query($query)->row();
+                                                    echo  '<strong> ' . $rider->name . ' (' . $rider->role_title . ') </strong>';
+                                                }
+                                                ?>
+
+                                            </th>
                                             <td><?php echo $row->delivery_status; ?></td>
                                             <td><?php echo $row->amount;
                                                 $total_amount += $row->amount;
@@ -268,6 +280,7 @@
                                         <th></th>
                                         <th></th>
                                         <th></th>
+                                        <th></th>
                                         <th>Total Packages: </th>
                                         <th><?php echo ($count - 1); ?></th>
                                         <th style="text-align: right;">Total: </th>
@@ -290,10 +303,12 @@
                                             <th></th>
                                             <th></th>
                                             <th></th>
+                                            <th></th>
                                             <th style="text-align: right;">Paid: </th>
                                             <th><?php echo $paid->total; ?></th>
                                         </tr>
                                         <tr>
+                                            <th></th>
                                             <th></th>
                                             <th></th>
                                             <th></th>
