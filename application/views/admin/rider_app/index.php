@@ -40,6 +40,8 @@
                                 </h4>
                                 <?php if ($delivery->delivery_status == 'Shipped' or $delivery->delivery_status == 'Onhold') { ?>
                                     <button onclick="get_delivery_detail('<?php echo $delivery->delivery_id; ?>')" class="btn btn-primary btn-sm">Process ></button>
+                                <?php } else { ?>
+                                    <button style="border: 1px solid red; color:red; padding:2px" onclick="get_delivery_detail('<?php echo $delivery->delivery_id; ?>')" class="btn btn-danger btn-link btn-sm">Change Status</button>
                                 <?php } ?>
                             </div>
                         </td>
