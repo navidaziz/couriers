@@ -86,7 +86,7 @@
 <div class="row">
     <div class="col-sm-3">
         <div id="errorDiv" class="box border blue" id="messenger" style="background-color:white; padding:4px; ">
-            Search by Tracking No: <br />
+            Assign by Tracking No: <br />
             <input class="form-control" type="text" id="tracking_no" placeholder="Scan barcode here" autofocus>
             <div style="margin-top: 5px;" id="tracking_no_response"></div>
             <hr />
@@ -167,7 +167,7 @@
 
 
 
-    <?php $deliverys_status = array("Delivered",  "Onhold", "Cancelled");
+    <?php $deliverys_status = array("Delivered",  "Onhold");
     foreach ($deliverys_status as $deliverys_status) { ?>
         <div class="col-sm-3">
             <div class="box border blue" id="messenger" style="background-color:white; padding:4px; height:530px; overflow-y: scroll;">
@@ -264,5 +264,82 @@
             </div>
         </div>
     <?php } ?>
+
+    <div class="col-sm-3">
+        <div id="c_errorDiv" class="box border blue" id="c_messenger" style="background-color:white; padding:4px; ">
+            Cancel by Tracking No: <br />
+            <input class="form-control" type="text" id="c_tracking_no" placeholder="Scan barcode here" autofocus>
+            <div style="margin-top: 5px;" id="c_tracking_no_response"></div>
+            <hr />
+            <div style="height: 425px; overflow-y: scroll; margin-top: 10px" id="rider_cancelled_list">
+
+            </div>
+        </div>
+
+        <script>
+            // Function to handle the barcode data
+            // function c_handleBarcode(barcode) {
+            //     alert("Barcode Scanned: " + barcode);
+            //     // Additional processing can be added here
+            // }
+
+            // Add event listener for the input field
+            const c_barcodeInput = document.getElementById('c_tracking_no');
+            c_barcodeInput.addEventListener('keyup', function(event) {
+                $('#c_tracking_no_response').html('');
+                if (event.key === 'Enter') {
+                    var c_tracking_no = $('#c_tracking_no').val();
+                    $.ajax({
+                        type: 'POST',
+                        url: '<?php echo site_url(ADMIN_DIR . "deliveries/seacrch_cancelled_by_tracking_no"); ?>', // URL to submit form data
+                        data: {
+                            tracking_no: c_tracking_no,
+                            rider_id: '<?php echo $rider->user_id; ?>'
+                        },
+                        success: function(response) {
+
+                            if (response == 'success') {
+                                $('#c_tracking_no').val('');
+                                $('#c_tracking_no_response').fadeOut(200, function() {
+                                    $(this).html('<div class="alert alert-success">Tracking ID: <strong>' + c_tracking_no + '</strong> <br />Removed Successfully.</div>').fadeIn(200);
+                                });
+                                get_rider_cancelled_list();
+                                //location.reload();
+                            } else {
+
+                                $('#c_tracking_no_response').fadeOut(200, function() {
+                                    $(this).html('<div class="alert alert-danger">' + response + '</div>').fadeIn(200);
+                                });
+                                triggerBuzz('c_errorDiv');
+                            }
+
+
+                        }
+                    });
+                }
+            });
+        </script>
+        <script>
+            function get_rider_cancelled_list() {
+
+                $.ajax({
+                    type: 'POST',
+                    url: '<?php echo site_url(ADMIN_DIR . "deliveries/get_rider_cancelled_list"); ?>', // URL to submit form data
+                    data: {
+                        rider_id: '<?php echo $rider->user_id; ?>'
+                    },
+                    success: function(response) {
+                        //alert(response);
+                        $('#rider_cancelled_list').html(response);
+                        // $('#rider_assigned_list').fadeOut(200, function() {
+                        //     $(this).html(response).fadeIn(200);
+
+                        // });
+                    }
+                });
+            }
+            get_rider_cancelled_list();
+        </script>
+    </div>
 
 </div>

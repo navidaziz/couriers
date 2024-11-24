@@ -554,6 +554,74 @@ class Deliveries extends Admin_Controller
     }
 
 
+    public function seacrch_cancelled_by_tracking_no()
+    {
+
+        $tracking_no = $this->input->post('tracking_no');
+        $parts = explode(",", $tracking_no); // Split the string by commas
+        $tracking_no = trim($parts[0]); // Get the first part and remove any extra spaces
+
+        $rider_id = (int) $this->input->post('rider_id');
+        $query = "SELECT * FROM deliveries WHERE tracking_number = ?";
+        $delivery = $this->db->query($query, [$tracking_no])->row();
+        //var_dump($delivery);
+        if ($delivery) {
+            $this->cancelled_package_from_rider($rider_id, $delivery->delivery_id);
+        } else {
+            echo 'Tracking No. (<strong>' . $tracking_no . '</strong>) Not Found.';
+        }
+    }
+
+    private function  cancelled_package_from_rider($rider_id, $delivery_id)
+    {
+        $query = "SELECT * FROM deliveries WHERE delivery_id = ?";
+        $delivery = $this->db->query($query, [$delivery_id])->row();
+        //var_dump($delivery);
+        if ($delivery) {
+            if ($delivery->rider_id == $rider_id and $delivery->delivery_status == 'Cancelled') {
+                $rider_id = (int) $this->input->post('rider_id');
+                $delivery_id = $delivery->delivery_id;
+                $inputs['rider_id'] = NULL;
+                $this->db->where("delivery_id", $delivery_id);
+                $this->db->where("rider_id", $rider_id);
+                $this->db->where("delivery_status", 'Cancelled');
+                $inputs["last_updated"] = date('Y-m-d H:i:s');
+                if ($this->db->update("deliveries", $inputs)) {
+
+                    //current user
+                    $user_id = $this->session->userdata("userId");
+                    $query = "SELECT users.name, roles.role_title FROM users 
+            INNER JOIN roles ON (roles.role_id = users.role_id)
+            WHERE user_id = $user_id";
+                    $creater = $this->db->query($query)->row();
+                    //rider detail
+                    $query = "SELECT users.name, roles.role_title FROM users 
+            INNER JOIN roles ON (roles.role_id = users.role_id)
+            WHERE user_id = $rider_id";
+                    $rider = $this->db->query($query)->row();
+
+                    $log['created_by'] = $creater->name . "(" . $creater->role_title . ")";
+                    $log['delivery_id'] = $delivery_id;
+                    $log['detail'] = $creater->name . "(" . $creater->role_title . ") remove assigned package from " . $rider->name . "(" . $rider->role_title . ") as cancelled.";
+                    $this->db->insert("delivery_logs", $log);
+                    echo 'success';
+                } else {
+                    echo "Error in data entry";
+                }
+            } else {
+                $query = "SELECT users.name, roles.role_title FROM users 
+                    INNER JOIN roles ON (roles.role_id = users.role_id)
+                    WHERE user_id = $delivery->rider_id";
+                $rider = $this->db->query($query)->row();
+                echo 'Tracking No. <strong>( ' . $delivery->tracking_number . ' ) <br />Status: ' . $delivery->delivery_status . '</strong><br /> Already assigned to:<strong> ' . $rider->name . ' (' . $rider->role_title . ') </strong>';
+            }
+        } else {
+            return 'Package Not Found';
+        }
+    }
+
+
+
     public function seacrch_by_tracking_no()
     {
         $tracking_no = $this->input->post('tracking_no');
@@ -576,6 +644,11 @@ class Deliveries extends Admin_Controller
         $this->load->view(ADMIN_DIR . "deliveries/rider/rider_assigned_list", $this->data);
     }
 
+    public function get_rider_cancelled_list()
+    {
+        $this->data['rider_id'] =   (int) $this->input->post('rider_id');
+        $this->load->view(ADMIN_DIR . "deliveries/rider/rider_cancelled_list", $this->data);
+    }
 
     public function complete_rider_payments()
     {
