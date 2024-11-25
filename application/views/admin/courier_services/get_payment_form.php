@@ -42,7 +42,7 @@
     <div class="form-group row">
         <label for="paid_amount" class="col-sm-4 col-form-label">Paid Amount</label>
         <div class="col-sm-8">
-            <input type="number" required id="paid_amount" name="paid_amount" value="<?php echo $input->paid_amount; ?>" class="form-control">
+            <input type="number" step="any" required id="paid_amount" name="paid_amount" value="<?php echo $input->paid_amount; ?>" class="form-control">
         </div>
     </div>
     <div class="form-group row">
