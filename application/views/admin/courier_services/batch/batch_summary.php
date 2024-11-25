@@ -168,6 +168,10 @@
                                 WHERE batch_id = ?
                                 AND delivery_status IN('Completed', 'Returned')";
         $completed_and_returned = $this->db->query($query, [$batch->batch_id])->row();
+        echo " if (($batch_status->total_packages == $completed_and_returned->total) and
+            $paid->total == $completed_amount->total
+            and $batch_status->total_packages > 0
+        ) {";
         if (($batch_status->total_packages == $completed_and_returned->total) and
             $paid->total == $completed_amount->total
             and $batch_status->total_packages > 0
