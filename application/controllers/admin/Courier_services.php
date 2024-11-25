@@ -307,8 +307,10 @@ class Courier_services extends Admin_Controller
         echo json_encode($output);
     }
 
-    public function courier_service_batche($courier_service_id, $batch_id)
+    public function courier_service_batche($courier_service_id, $batch_id, $tab = 'Summary')
     {
+
+        $this->data['tab'] = $tab;
 
         $courier_service_id = (int) $courier_service_id;
         $batch_id = (int) $batch_id;
@@ -676,7 +678,7 @@ class Courier_services extends Admin_Controller
 
             $log['created_by'] = $creater->name . "(" . $creater->role_title . ")";
             $log['delivery_id'] = $delivery_id;
-            $log['detail'] = $creater->name . "(" . $creater->role_title . ") returend delivery package to " . $courier_service->courier_service_name;
+            $log['detail'] = $creater->name . "(" . $creater->role_title . ") Returned delivery package to " . $courier_service->courier_service_name;
             $this->db->insert("delivery_logs", $log);
         }
 
@@ -737,6 +739,88 @@ class Courier_services extends Admin_Controller
             }
         } else {
             echo '<div class="alert alert-danger">Package Not Found In This Batch.</div>';
+        }
+    }
+
+    public function batch_packages_list()
+    {
+        $this->data['batch_id'] = $batch_id = (int) $this->input->post('batch_id');
+        $this->data['courier_service_id'] = $courier_service_id = (int) $this->input->post('courier_service_id');
+        $this->data['tab'] = $this->input->post('tab');
+
+        $this->data["courier_service"] = $this->courier_service_model->get_courier_service($courier_service_id)[0];
+        $query = "SELECT batches.*, cs.courier_service_name FROM batches 
+        INNER JOIN courier_services as cs ON(cs.courier_service_id = batches.courier_service_id)
+        WHERE batch_id = '" . $batch_id . "'";
+        $this->data['batch'] = $batch = $this->db->query($query)->row();
+
+        $this->load->view(ADMIN_DIR . "courier_services/batch/batch_delivery_list", $this->data);
+    }
+
+    public function return_by_tracking_no()
+    {
+
+        $this->data['batch_id'] = $batch_id = (int) $this->input->post('batch_id');
+        $this->data['courier_service_id'] = $courier_service_id = (int) $this->input->post('courier_service_id');
+        $this->data['tab'] = $this->input->post('tab');
+
+        $tracking_no = $this->input->post('tracking_no');
+        $parts = explode(",", $tracking_no); // Split the string by commas
+        $tracking_no = trim($parts[0]);
+
+        $query = "SELECT * FROM deliveries WHERE tracking_number = ?";
+        $delivery = $this->db->query($query, [$tracking_no])->row();
+        //var_dump($delivery);
+        if ($delivery) {
+            $this->return_package_from_rider($batch_id, $delivery->delivery_id);
+        } else {
+            echo 'Tracking No. (<strong>' . $tracking_no . '</strong>) Not Found.';
+        }
+    }
+
+    private function return_package_from_rider($batch_id, $delivery_id)
+    {
+        $query = "SELECT * FROM deliveries WHERE delivery_id = ?";
+        $delivery = $this->db->query($query, [$delivery_id])->row();
+        //var_dump($delivery);
+        if ($delivery) {
+            if ($delivery->batch_id == $batch_id and $delivery->delivery_status == 'Cancelled') {
+
+                $inputs['delivery_status'] = 'Returned';
+                $inputs["last_updated"] = date('Y-m-d H:i:s');
+                $this->db->where("batch_id", $delivery->batch_id);
+                $this->db->where("courier_service_id", $delivery->courier_service_id);
+                $this->db->where("delivery_id", $delivery->delivery_id);
+                if ($this->db->update("deliveries", $inputs)) {
+
+                    //current user
+                    $user_id = $this->session->userdata("userId");
+                    $query = "SELECT users.name, roles.role_title FROM users 
+                    INNER JOIN roles ON (roles.role_id = users.role_id)
+                    WHERE user_id = $user_id";
+                    $creater = $this->db->query($query)->row();
+                    //rider detail
+                    $query = "SELECT courier_service_name FROM courier_services 
+                    WHERE courier_services.courier_service_id = $delivery->courier_service_id";
+                    $courier_service = $this->db->query($query)->row();
+
+                    $log['created_by'] = $creater->name . "(" . $creater->role_title . ")";
+                    $log['delivery_id'] = $delivery_id;
+                    $log['detail'] = $creater->name . "(" . $creater->role_title . ") returend delivery package to " . $courier_service->courier_service_name;
+                    $this->db->insert("delivery_logs", $log);
+                    echo "success";
+                } else {
+                    echo "Error While Update";
+                }
+            } else {
+                $query = "SELECT b.batch_no, b.batch_date , c.courier_service_name FROM batches as b 
+                INNER JOIN courier_services as c ON(c.courier_service_id = b.courier_service_id)
+                WHERE b.batch_id = $delivery->batch_id";
+                $d_batch = $this->db->query($query)->row();
+                echo 'Tracking No. <strong>( ' . $delivery->tracking_number . ' ) <br />Status: ' . $delivery->delivery_status . '</strong><br /> Belong to ' . $d_batch->courier_service_name . ' -  Batch:<strong> ' . $d_batch->batch_no . ' (' . $d_batch->batch_date . ') </strong>';
+            }
+        } else {
+            return 'Package Not Found';
         }
     }
 }

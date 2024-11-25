@@ -19,10 +19,13 @@
             </ul>
             <!-- /BREADCRUMBS -->
             <div class="row">
+                <div class="col-md-2">
+                    <img style="width:100%; height:50px" src="<?php echo base_url("assets/uploads/" . $courier_service->logo) ?>" />
 
-                <div class="col-md-6">
+                </div>
+                <div class="col-md-4">
                     <div class="clearfix">
-                        <h3 class="content-title pull-left"><?php echo $title; ?></h3>
+                        <h3 class="content-title pull-left"><?php echo $courier_service->short_name; ?></h3>
                     </div>
                     <div class="description"><?php echo $title; ?></div>
                 </div>
@@ -60,55 +63,9 @@
 
 <!-- PAGE MAIN CONTENT -->
 <div class="row">
-    <!-- MESSENGER -->
-    <div class="col-md-3">
-        <div class="box border blue" id="messenger">
-            <div class="box-body">
-
-                <div class="table-responsive">
-
-                    <table class="table">
-                        <thead>
-
-                        </thead>
-                        <tbody>
-
-                            <tr>
-
-                                <td>
-                                    <img style="width:100%; height:100px" src="<?php echo base_url("assets/uploads/" . $courier_service->logo) ?>" />
-
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <?php echo $courier_service->courier_service_name; ?>
-                                    (<?php echo $courier_service->short_name; ?>)
-                                </td>
-                            </tr>
 
 
-                            <tr>
-                                <td>
-                                    <?php echo status($courier_service->status); ?>
-                                </td>
-                            </tr>
-
-                        </tbody>
-                    </table>
-
-
-
-
-                </div>
-
-
-            </div>
-
-        </div>
-    </div>
-
-    <div class="col-md-9">
+    <div class="col-md-12">
         <div class="box border blue" id="messenger">
             <div class="box-body">
 
@@ -173,8 +130,8 @@
                                         "data": null,
                                         "render": function(data, type, row) {
                                             // '<a class="llink llink-view" href="<?php echo site_url(ADMIN_DIR . "batches/trash/"); ?>' + row.batch_id + '/' + '" onclick="return confirm(\'Are you sure? you want to delete the record.\')"><i class="fa fa-trash-o"></i></a><span style="margin-left: 20px;"></span>' +
-                                            return '<a class="btn btn-success btn-sm" href="<?php echo site_url(ADMIN_DIR . "courier_services/courier_service_batche/"); ?>' + row.courier_service_id + '/' + row.batch_id + '/' + '">View</a><span style="margin-left: 20px;"></span>' +
-                                                '<button onclick="get_batch_form(\'' + row.batch_id + '\')" class="btn btn-primary btn-sm">Edit</button>';
+                                            return '<a class="btn btn-success btn-sm" href="<?php echo site_url(ADMIN_DIR . "courier_services/courier_service_batche/"); ?>' + row.courier_service_id + '/' + row.batch_id + '/' + '">View</a><span style="margin-left: 20px;"></span>';
+                                            //'<button onclick="get_batch_form(\'' + row.batch_id + '\')" class="btn btn-primary btn-sm">Edit</button>';
                                         }
                                     }
 
