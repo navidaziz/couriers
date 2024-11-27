@@ -21,8 +21,9 @@ class Rider_app extends Admin_Controller
     /**
      * Default action to be called
      */
-    public function index()
+    public function index($tab = 'Shipped')
     {
+        $this->data['tab'] = $tab;
         $user_id = $this->session->userdata("userId");
         $query = "SELECT users.user_id, users.name, roles.role_title FROM users 
         INNER JOIN roles ON (roles.role_id = users.role_id)
